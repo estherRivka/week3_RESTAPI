@@ -8,10 +8,5 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\CoranaApp.Services\CoronaApp.Services.csproj" />
-    <ProjectReference Include="..\CoronaApp.Dal\CoronaApp.Dal.csproj" />
-  </ItemGroup>
-
 
 </Project>

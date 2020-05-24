@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CoronaApp.Dal
 {
-    class PathRepository
+    public class PathRepository
     {
     }
 }

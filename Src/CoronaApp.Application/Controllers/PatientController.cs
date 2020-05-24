@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 
-using CoronaApp.Services.Entities;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,31 +20,16 @@ namespace CoronaApp.Api.Controllers
     [ApiController]
     public class PatientController : ControllerBase
     {
-        private readonly static List<Patient> patients = new List<Patient>() {
-            new Patient() { Id = 1, Paths = new List<Path>() {
-                new Path(){ City = "Jerusalem", StartDate = new DateTime(2019, 12, 08), EndDate = new DateTime(2019, 12, 09), Location = "Library" },
-                new Path() { City = "Jafa", StartDate = new DateTime(2019, 10, 10), EndDate = new DateTime(2019, 10, 11), Location = "Library" },
-                new Path() { City = "Tzfat", StartDate = new DateTime(2018, 03, 02), EndDate = new DateTime(2018, 03, 05), Location = "Library" }
-                },
-
-            },
-            new Patient() { Id = 2, Paths = new List<Path>() {
-                new Path() { City = "Tel Aviv", StartDate = new DateTime(2018, 12, 08), EndDate = new DateTime(2018, 12, 01), Location = "Library" },
-                new Path() { City = "Tiberias", StartDate = new DateTime(2020, 10, 12), EndDate = new DateTime(2020, 10, 11), Location = "Library" }
-
-                }
-            }
-
-        };
-
-
         // GET api/<PatientController>/5
         private readonly IMapper _mapper;
+        private readonly IPatientService _patientService;
         private readonly LinkGenerator _linkGenerator;
-        public PatientController(IMapper mapper, LinkGenerator linkGenerator)
+        public PatientController(IMapper mapper, LinkGenerator linkGenerator, IPatientService patientService)
         {
             _mapper = mapper;
             _linkGenerator = linkGenerator;
+             _patientService = patientService;
+            
         }
 
 
@@ -57,14 +41,9 @@ namespace CoronaApp.Api.Controllers
         {
             try
             {
-                Patient patient = patients
-                    .Find(patient => patient.Id == id);
 
-                if (patient == null)
-                {
-                    return NotFound($"patient with id:{id} was not found");
-                }
-                return _mapper.Map<PatientModel>(patient);
+              return  _patientService.GetById(id);
+               
             }
             catch (Exception e)
             {

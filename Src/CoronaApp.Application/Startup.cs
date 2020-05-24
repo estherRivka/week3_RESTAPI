@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using CoronaApp.Services;
 
 namespace CoronaApp.Api
 {
@@ -26,6 +27,7 @@ namespace CoronaApp.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped(typeof(IPatientService), typeof(PatientService));
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
             services.AddCors(options =>

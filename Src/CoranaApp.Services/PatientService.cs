@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CoronaApp.Services
 {
-    class PatientService
+   public class PatientService 
     {
     }
 }

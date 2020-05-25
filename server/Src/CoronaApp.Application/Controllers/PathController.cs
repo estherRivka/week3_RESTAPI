@@ -75,6 +75,7 @@ namespace CoronaApp.Api.Controllers
                 //// return NotFound($"Couldn't find any paths in city {city}");
                 //return _mapper.Map<List<PathModel>>(PathsInCity);
                 if (paths == null)
+                    // return NotFound($"Couldn't find any paths in city {pathSearchModel.City}");
                     return NotFound($"Couldn't find any paths in city {pathSearchModel.City}");
                 return paths;
             }

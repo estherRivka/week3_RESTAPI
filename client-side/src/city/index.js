@@ -1,5 +1,6 @@
 ﻿
 'use strict';
+const URLPath="http://localhost:6060/api/path";
 const script = document.createElement('script');
 script.src = '//code.jquery.com/jquery-1.11.0.min.js';
 document.getElementsByTagName('head')[0].appendChild(script);
@@ -9,10 +10,10 @@ let culumnNames = [];
 
 window.addEventListener('load', loadHtmlPage);
 
-function getAllLocationsFromServer() {
+function getAllLocationsFromServer(URLPath) {
     return new Promise((resolve, reject) => {
         $.ajax({
-            url: "http://localhost:6060/path", success: function (result) {
+            url: URLPath, success: function (result) {
                 resolve(result);
             },
             error: function (result) {
@@ -23,10 +24,10 @@ function getAllLocationsFromServer() {
 
 
 }
-function getLocationsFromServerByCity(city) {
+function getLocationsFromServerByCity(URLPath,city) {
     return new Promise((resolve, reject) => {
         $.ajax({
-            url: "http://localhost:6060/path/" + city, success: function (result) {
+            url: URLPath + '/'+'GetPathSearchBy?pathSearchModel.City='+city, success: function (result) {
                 resolve(result);
             },
             error: function (result) {
@@ -85,7 +86,7 @@ function loadHtmlPage() {
     if (isNotNull(document.getElementById("myInput")) === true)
         autocomplete(document.getElementById("myInput"), countries);
 
-    getAllLocationsFromServer().then(result => {
+    getAllLocationsFromServer(URLPath).then(result => {
         culumnNames = getCulumnNamesData(result);
         locationsDataset = result;
         createTable(result);
@@ -165,7 +166,7 @@ function getAllLocationsOfPatience() {
     if (isNotNull(document.getElementById("citySearchDiv")) === true)
         visualizitionOfElement(document.getElementById("citySearchDiv"), "visible");
 
-    getAllLocationsFromServer().then(result => {
+    getAllLocationsFromServer(URLPath).then(result => {
         culumnNames = getCulumnNamesData(result);
         locationsDataset = result;
         createTable(result);
@@ -283,7 +284,7 @@ function autocomplete(inp, arr) {
 
 function showResultsFilterdByCity(city) {
     const citiesSortedByInput = [];
-    getLocationsFromServerByCity(city).then(result => {
+    getLocationsFromServerByCity(URLPath,city).then(result => {
         createTable(result);
         if (isNotNull(document.getElementById("getAllLocations")) === true)
             statusOfElement(document.getElementById("getAllLocations"), false);

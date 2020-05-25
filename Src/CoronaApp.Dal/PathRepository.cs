@@ -15,7 +15,7 @@ namespace CoronaApp.Dal
     public class PathRepository : IPathRepository
     {
         
-
+        [HttpGet]
         public List<Path> GetAllPaths()
         {
             
@@ -24,7 +24,8 @@ namespace CoronaApp.Dal
                 return paths;
         }
 
-        public List<Path> GetPathsByCity(PathSearch locationSearch)
+        [HttpGet("{locationSearch}")]
+        public List<Path> GetPathsByCity([FromQuery] PathSearch locationSearch)
         {
            
                 List<Path> paths = DataFormat.GetAllPaths();

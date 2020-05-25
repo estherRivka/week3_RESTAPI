@@ -24,7 +24,7 @@ namespace CoronaApp.Api.Controllers
     [ApiController]
     public class PathController : ControllerBase
     {
-       
+
 
         private readonly IMapper _mapper;
         private readonly IPathService _pathService;
@@ -42,29 +42,31 @@ namespace CoronaApp.Api.Controllers
 
             try
             {
-                List<PathModel> paths= _pathService.GetAllPaths();
+                List<PathModel> paths = _pathService.GetAllPaths();
                 //List<Path> paths = DataFormat.GetAllPaths();
                 //if (paths == null) return NotFound("Couldn't find any paths");
                 //// if (!paths.Any()) return BadRequest("Couldn't find any paths");
                 //return _mapper.Map<List<PathModel>>(paths);
-                if(paths==null)
+                if (paths == null)
                     return NotFound("Couldn't find any paths");
                 return paths;
             }
             catch (Exception)
             {
-               // return e.Message;
+                // return e.Message;
                 return StatusCode(StatusCodes.Status500InternalServerError, "Failed to get Paths");
             }
         }
 
+        //[HttpGet("{pathSearch}")]
+        [HttpGet]
+        [Route("[action]")]
 
-        [HttpGet("{pathSearch}")]
-        public ActionResult<List<PathModel>> Get(PathSearchModel pathSearch)
+        public ActionResult<List<PathModel>> GetPathSearchBy([FromQuery]PathSearchModel pathSearchModel=null)
         {
             try
             {
-                List<PathModel> paths= _pathService.GetPathsByCity(pathSearch);
+                List<PathModel> paths= _pathService.GetPathsByCity(pathSearchModel);
                 //List<Path> paths = DataFormat.GetAllPaths();
                 //if (paths == null || !paths.Any())
                 //    return NotFound("Couldn't find any paths");
@@ -73,7 +75,7 @@ namespace CoronaApp.Api.Controllers
                 //// return NotFound($"Couldn't find any paths in city {city}");
                 //return _mapper.Map<List<PathModel>>(PathsInCity);
                 if (paths == null)
-                    return NotFound($"Couldn't find any paths in city {pathSearch.City}");
+                    return NotFound($"Couldn't find any paths in city {pathSearchModel.City}");
                 return paths;
             }
             catch (Exception)

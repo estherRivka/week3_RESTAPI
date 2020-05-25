@@ -18,14 +18,14 @@ namespace CoronaApp.Services
         //    return NotFound($"patient with id:{id} was not found");
         //}
         //return _mapper.Map<PatientModel>(patient);
-        public List<PathModel> GetAll()
-        {
-            throw new NotImplementedException();
-        }
+        //public List<PathModel> GetAll()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public List<PathModel> GetByLocation()
-        {
-            throw new NotImplementedException();
-        }
+        //public List<PathModel> GetByLocation()
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

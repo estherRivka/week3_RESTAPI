@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using CoronaApp.Models;
 using CoronaApp.Services;
-
-
-//using CoronaApp.Services.Models;
-//using CoronaApp.Services.Entities;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace CoronaApp.Api.Controllers
 {
@@ -23,70 +18,64 @@ namespace CoronaApp.Api.Controllers
     public class PatientController : ControllerBase
     {
         // GET api/<PatientController>/5
-        private readonly IMapper _mapper;
         private readonly IPatientService _patientService;
         private readonly LinkGenerator _linkGenerator;
-        public PatientController(IMapper mapper, LinkGenerator linkGenerator, IPatientService patientService)
+        public PatientController(IPatientService patientService, LinkGenerator linkGenerator)
         {
-            _mapper = mapper;
             _linkGenerator = linkGenerator;
-             _patientService = patientService;
-            
+            _patientService = patientService;
+
         }
 
 
-
         [EnableCors]
-        // GET: api/Path/5
         [HttpGet("{id:int}")]
-        public ActionResult<PatientModel> Get(int id)
+        public ActionResult<PatientModel> GetById(int id)
         {
             try
             {
-
-                return _patientService.GetById(id);
-               
+                PatientModel patient = _patientService.GetById(id);
+                if (patient == null)
+                {
+                    return NotFound($"patient with id:{id} was not found");
+                }
+                else
+                {
+                    return patient;
+                }
             }
             catch (Exception e)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure while retrieving patient");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure while retrieving patient" + e.StackTrace);
             }
 
         }
 
         // POST: api/Path
         [HttpPost]
-        public ActionResult<PatientModel> Post(PatientModel newPatient)
+        public ActionResult<PatientModel> Save(PatientModel newPatient)
         {
             try
             {
-                bool exists = patients
-                    .Exists(patient => patient.Id == newPatient.PatientId);
-                if (exists == true)
+                PatientModel patient = _patientService.Save(newPatient);
+                if (patient == null)
                 {
                     return BadRequest($"patient with id:{newPatient.PatientId} already exists");
                 }
-
-                var newPatientURI = _linkGenerator.GetPathByAction(HttpContext,
-                  "Get",
-                  values: new { id = newPatient.PatientId });
+                var newPatientURI = _linkGenerator
+                        .GetPathByAction(HttpContext, "Get",
+               values: new { id = newPatient.PatientId }
+                       );
 
                 if (string.IsNullOrWhiteSpace(newPatientURI))
                 {
-                    return BadRequest("Could not use current patientId");
+                    throw new Exception("BadRequest Could not use current patientId");
                 }
-
-                // Create a new Camp
-                Patient patient = _mapper.Map<Patient>(newPatient);
-                patients.Add(patient);
-
-                return Created(newPatientURI, _mapper.Map<Patient>(patient));
-
-
+                return Created(newPatientURI, patient); ;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure while creating new patient");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure while creating new patient" + e.StackTrace);
             }
 
         }
@@ -94,25 +83,21 @@ namespace CoronaApp.Api.Controllers
 
         // PUT: api/Path/5
         [HttpPut]
-        public ActionResult<PatientModel> Put(PatientModel updatedPatient)
+        public ActionResult<PatientModel> Update(PatientModel updatedPatient)
         {
             try
             {
-                Patient patientToUpdate = patients
-                    .Find(patient => patient.Id == updatedPatient.PatientId);
-
-                DateTime x = DateTime.ParseExact(updatedPatient.Paths[0].StartDate, "dd/mm/yyyy", null);
-                if (patientToUpdate == null)
+                PatientModel patient = _patientService.Update(updatedPatient);
+                if (patient == null)
                 {
-                    return NotFound($"patient with id:{updatedPatient.PatientId} was not found");
+                    return BadRequest($"patient with id:{updatedPatient.PatientId} was not found");
                 }
-                _mapper.Map(updatedPatient, patientToUpdate);
-                return _mapper.Map<PatientModel>(patientToUpdate);
+
+                return _patientService.Update(updatedPatient);
             }
             catch (Exception e)
             {
-
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure while retrieving patient");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure while retrieving patient" + e.StackTrace);
             }
 
 
@@ -124,19 +109,13 @@ namespace CoronaApp.Api.Controllers
         {
             try
             {
-                Patient patient = patients.Find(patient => patient.Id == id);
-                if (patient == null)
-                {
-                    return BadRequest($"patient with id:{id} does not exist");
-                }
-
-                patients.Remove(patient);
+                // return _patientService.Delete(id);
                 return Ok();
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure while deleting patient");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure while deleting patient"+e.StackTrace);
             }
 
         }

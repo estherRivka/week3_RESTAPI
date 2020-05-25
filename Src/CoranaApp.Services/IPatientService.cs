@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CoronaApp.Models;
+using Microsoft.VisualBasic.FileIO;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,6 +8,9 @@ namespace CoronaApp.Services
 {
     public interface IPatientService
     {
-    //   GetById(int id);
+        PatientModel GetById(int id);
+        PatientModel Save(PatientModel newPatient);
+        PatientModel Update(PatientModel updatedPatient);
+         //Delete(int id);
     }
 }

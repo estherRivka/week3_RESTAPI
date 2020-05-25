@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using System;
 using Xunit;
 
+
 namespace CoronaApp.Tests
 {
     public class PatientControllerTests : IClassFixture<WebApplicationFactory<Api.Startup>>
@@ -19,7 +20,7 @@ namespace CoronaApp.Tests
             var client = _factory.CreateClient();
 
             // Act
-            var response = await client.GetAsync("/api/patient/000000018");
+            var response = await client.GetAsync("/api/patient/1");
 
             // Assert
             response.EnsureSuccessStatusCode(); 

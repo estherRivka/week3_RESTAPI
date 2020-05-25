@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using CoronaApp.Models;
+using CoronaApp.Services;
+
 //using AutoMapper;
-using CoronaApp.Api.Models;
-using CoronaApp.Dal;
-using CoronaApp.Services.Entities;
+
 //using CoronaApp.Services.Models;
 //using CoronaApp.Services.Entities;
 //using CoronaApp.Entities;
@@ -26,15 +27,16 @@ namespace CoronaApp.Api.Controllers
        
 
         private readonly IMapper _mapper;
-        public PathController(IMapper mapper)
+        private readonly IPathService _pathService;
+        public PathController(IMapper mapper, IPathService pathService)
         {
             _mapper = mapper;
+            _pathService = pathService;
 
         }
 
         [EnableCors]
         [HttpGet]
-
         public ActionResult<List<PathModel>> Get()
         {
 

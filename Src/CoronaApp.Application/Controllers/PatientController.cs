@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using CoronaApp.Api.Models;
+using CoronaApp.Services;
+
+
 //using CoronaApp.Services.Models;
 //using CoronaApp.Services.Entities;
 using Microsoft.AspNetCore.Cors;
@@ -42,7 +44,7 @@ namespace CoronaApp.Api.Controllers
             try
             {
 
-              return  _patientService.GetById(id);
+                return _patientService.GetById(id);
                
             }
             catch (Exception e)
@@ -54,7 +56,7 @@ namespace CoronaApp.Api.Controllers
 
         // POST: api/Path
         [HttpPost]
-        public ActionResult<Patient> Post(PatientModel newPatient)
+        public ActionResult<PatientModel> Post(PatientModel newPatient)
         {
             try
             {

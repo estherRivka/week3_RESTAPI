@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using CoronaApp.Dal;
+using CoronaApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,7 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using CoronaApp.Services;
+
+
 
 namespace CoronaApp.Api
 {
@@ -27,9 +30,14 @@ namespace CoronaApp.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped(typeof(IPatientRepository), typeof(PatientRepository));
+            services.AddScoped(typeof(IPathRepository), typeof(PathRepository));
+            services.AddScoped(typeof(IPathService), typeof(PathService));
             services.AddScoped(typeof(IPatientService), typeof(PatientService));
+           
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
+           // services.AddTransient<IPatientRepository, PatientRepository>();
             services.AddCors(options =>
             {
                 options.AddPolicy("Policy1",

@@ -1,5 +1,4 @@
-﻿using CoronaApp.Models;
-using CoronaApp.Services.Entities;
+﻿using CoronaApp.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;

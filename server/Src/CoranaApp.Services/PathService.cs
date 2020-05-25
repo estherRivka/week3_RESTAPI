@@ -1,8 +1,10 @@
 ﻿
 using AutoMapper;
-using CoronaApp.Models;
-using CoronaApp.Services.Entities;
-using Microsoft.AspNetCore.Mvc;
+using CoronaApp.Entities;
+using CoronaApp.Services.Models;
+//using CoronaApp.Models;
+//using CoronaApp.Services.Entities;
+//using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -30,10 +32,6 @@ namespace CoronaApp.Services
             return _mapper.Map<List<PathModel>>(paths);
         }
 
-        //public ActionResult<List<PathModel>> GetByLocation()
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         public List<PathModel> GetPathsByCity(PathSearchModel locationSearchModel)
         {

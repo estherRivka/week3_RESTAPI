@@ -1,7 +1,7 @@
 ﻿
 using AutoMapper;
-using CoronaApp.Models;
-using CoronaApp.Services.Entities;
+using CoronaApp.Entities;
+using CoronaApp.Services.Models;
 using Microsoft.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;

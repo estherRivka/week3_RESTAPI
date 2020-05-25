@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CoronaApp.Models
+namespace CoronaApp.Services.Models
 {
     public class PathModel
     {

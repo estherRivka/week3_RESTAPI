@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Models\CoronaApp.Models.csproj" />
+    <ProjectReference Include="..\..\CoronaApp.Entities\CoronaApp.Entities.csproj" />
     <ProjectReference Include="..\CoranaApp.Services\CoronaApp.Services.csproj" />
     <ProjectReference Include="..\CoronaApp.Dal\CoronaApp.Dal.csproj" />
   </ItemGroup>

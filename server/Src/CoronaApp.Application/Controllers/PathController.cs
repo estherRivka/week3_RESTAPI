@@ -3,14 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using CoronaApp.Models;
 using CoronaApp.Services;
-
-//using AutoMapper;
-
-//using CoronaApp.Services.Models;
-//using CoronaApp.Services.Entities;
-//using CoronaApp.Entities;
+using CoronaApp.Services.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -43,10 +37,7 @@ namespace CoronaApp.Api.Controllers
             try
             {
                 List<PathModel> paths = _pathService.GetAllPaths();
-                //List<Path> paths = DataFormat.GetAllPaths();
-                //if (paths == null) return NotFound("Couldn't find any paths");
-                //// if (!paths.Any()) return BadRequest("Couldn't find any paths");
-                //return _mapper.Map<List<PathModel>>(paths);
+               
                 if (paths == null)
                     return NotFound("Couldn't find any paths");
                 return paths;
@@ -67,13 +58,7 @@ namespace CoronaApp.Api.Controllers
             try
             {
                 List<PathModel> paths= _pathService.GetPathsByCity(pathSearchModel);
-                //List<Path> paths = DataFormat.GetAllPaths();
-                //if (paths == null || !paths.Any())
-                //    return NotFound("Couldn't find any paths");
-                //List<Path> PathsInCity = paths.FindAll(path => path.City == city);
-                //// if (sortedPath != null && !sortedPath.Any())
-                //// return NotFound($"Couldn't find any paths in city {city}");
-                //return _mapper.Map<List<PathModel>>(PathsInCity);
+                
                 if (paths == null)
                     // return NotFound($"Couldn't find any paths in city {pathSearchModel.City}");
                     return NotFound($"Couldn't find any paths in city {pathSearchModel.City}");

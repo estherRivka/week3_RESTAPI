@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CoronaApp.Services.Entities
+namespace CoronaApp.Entities
 {
     public class Path
     {

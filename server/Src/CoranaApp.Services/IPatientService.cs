@@ -1,4 +1,4 @@
-﻿using CoronaApp.Models;
+﻿using CoronaApp.Services.Models;
 using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;

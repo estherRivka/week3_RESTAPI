@@ -1,6 +1,4 @@
-﻿using CoronaApp.Models;
-using CoronaApp.Services.Entities;
-using Microsoft.AspNetCore.Mvc;
+﻿using CoronaApp.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;

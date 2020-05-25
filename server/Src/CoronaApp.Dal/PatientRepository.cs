@@ -1,7 +1,8 @@
 ﻿
 using AutoMapper;
+using CoronaApp.Entities;
 using CoronaApp.Services;
-using CoronaApp.Services.Entities;
+
 using System;
 using System.Collections.Generic;
 
@@ -46,7 +47,7 @@ namespace CoronaApp.Dal
             Patient patientToUpdate = patients
                         .Find(patient => patient.Id == updatedPatient.Id);
 
-            // DateTime x = DateTime.ParseExact(updatedPatient.Paths[0].StartDate, "dd/mm/yyyy", null);
+            
             if (patientToUpdate == null)
             {
                 return;

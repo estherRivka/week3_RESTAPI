@@ -10,7 +10,7 @@ namespace CoronaApp.Dal
 {
     public class PatientRepository : IPatientRepository
     {
-        private readonly static List<Patient> patients = new List<Patient>() {
+        private static List<Patient> patients = new List<Patient>() {
             new Patient() { Id = 1, Paths = new List<Path>() {
                 new Path(){ City = "Jerusalem", StartDate = new DateTime(2019, 12, 08), EndDate = new DateTime(2019, 12, 09), Location = "Library" },
                 new Path() { City = "Jafa", StartDate = new DateTime(2019, 10, 10), EndDate = new DateTime(2019, 10, 11), Location = "Library" },
@@ -38,11 +38,12 @@ namespace CoronaApp.Dal
                .Find(patient => patient.Id == id);
             return patient;
         }
-        public void Save(Patient newPatient)
+        public Patient Save(Patient newPatient)
         {
-            patients.Add(newPatient); 
+            patients.Add(newPatient);
+            return newPatient;
         }
-        public void Update(Patient updatedPatient)
+        public Patient Update(Patient updatedPatient)
         {
             Patient patientToUpdate = patients
                         .Find(patient => patient.Id == updatedPatient.Id);
@@ -50,10 +51,10 @@ namespace CoronaApp.Dal
             
             if (patientToUpdate == null)
             {
-                return;
+                return null;
             }
-            _mapper.Map(updatedPatient, patientToUpdate);
-
+             _mapper.Map(updatedPatient, patientToUpdate);
+            return patientToUpdate;
         }
         //delete()
         //{

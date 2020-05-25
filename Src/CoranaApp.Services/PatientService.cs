@@ -37,9 +37,8 @@ namespace CoronaApp.Services
             {
                 return null;
             }
-             patient = _mapper.Map<Patient>(newPatient);
-            _patientRepository.Save(patient);
-            return _mapper.Map<PatientModel>(patient);
+            _patientRepository.Save(_mapper.Map<Patient>(newPatient));
+            return newPatient;
 
         }
         public PatientModel Update(PatientModel updatedPatient)

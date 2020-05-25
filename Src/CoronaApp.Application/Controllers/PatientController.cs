@@ -57,6 +57,8 @@ namespace CoronaApp.Api.Controllers
         {
             try
             {
+
+
                 PatientModel patient = _patientService.Save(newPatient);
                 if (patient == null)
                 {

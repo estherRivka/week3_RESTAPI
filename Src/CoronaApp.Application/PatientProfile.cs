@@ -29,7 +29,7 @@ namespace CoronaApp.Api
                 .ForMember(dest => dest.EndDate, opt => opt.MapFrom(m => DateTime.ParseExact(m.EndDate, "dd/mm/yyyy", null)));
 
             // .ForMember(dest => dest.EndDate, opt => opt.MapFrom(m => Convert.ToDateTime(m.EndDate)));
-
+            this.CreateMap<PathSearch, PathSearchModel>().ReverseMap();
 
         }
     }

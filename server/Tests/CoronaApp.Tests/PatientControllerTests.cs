@@ -1,3 +1,4 @@
+using CoronaApp.Api;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System;
 using Xunit;

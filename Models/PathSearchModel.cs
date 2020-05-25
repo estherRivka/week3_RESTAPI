@@ -2,5 +2,6 @@
 {
     public class PathSearchModel
     {
+        public string City { get; set; }
     }
 }

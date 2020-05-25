@@ -1,16 +1,48 @@
 ﻿using CoronaApp.Services;
 using CoronaApp.Services.Entities;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Metadata.Ecma335;
+using System.Runtime.Serialization;
 using System.Text;
+//using Microsoft.AspNetCore.Http;
+
 
 namespace CoronaApp.Dal
 {
     public class PathRepository : IPathRepository
     {
-        public ICollection<Path> Get(LocationSearch locationSearch)
+        
+
+        public List<Path> GetAllPaths()
         {
-            throw new NotImplementedException();
+            
+            
+                List<Path> paths = DataFormat.GetAllPaths();
+                return paths;
         }
+
+        public List<Path> GetPathsByCity(PathSearch locationSearch)
+        {
+           
+                List<Path> paths = DataFormat.GetAllPaths();
+            if (paths == null || !paths.Any())
+                return null;
+                    //throw new Exception("couldnt find any paths!");
+               List<Path> PathsInCity = paths.FindAll(path => path.City == locationSearch.City);
+            if (PathsInCity == null || !PathsInCity.Any())
+                // throw new Exception("couldnt find any paths in this city!");
+                return null;
+                return PathsInCity;
+                //return _mapper.Map<List<PathModel>>(PathsInCity);
+           
+        }
+
+        //List<Path> IPathRepository.GetPathsByCity(PathSearch locationSearch)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

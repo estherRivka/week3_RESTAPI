@@ -55,6 +55,8 @@ namespace CoronaApp.Api
                     });
 
             });
+            services.AddDbContext<CoronaContext>(options => options.UseSqlServer
+           (Configuration.GetConnectionString("CoronaDBConnectionString")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

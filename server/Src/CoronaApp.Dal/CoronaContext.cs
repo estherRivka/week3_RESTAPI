@@ -9,5 +9,6 @@ namespace CoronaApp.Dal
     public class CoronaContext:DbContext
     {
         public DbSet<Path> Path  { get; set; }
+        public DbSet<Patient> Patients { get; set; }
     }
 }

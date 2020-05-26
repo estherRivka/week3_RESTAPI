@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using CoronaApp.Services;
 using CoronaApp.Services.Models;
+//using EntitiesTemp;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,12 +32,12 @@ namespace CoronaApp.Api.Controllers
 
         [EnableCors]
         [HttpGet]
-        public ActionResult<List<PathModel>> Get()
+        public async Task<ActionResult<List<PathModel>>> Get()
         {
 
             try
             {
-                List<PathModel> paths = _pathService.GetAllPaths();
+                List<PathModel> paths =await _pathService.GetAllPaths();
                
                 if (paths == null)
                     return NotFound("Couldn't find any paths");
@@ -53,11 +54,12 @@ namespace CoronaApp.Api.Controllers
         [HttpGet]
         [Route("[action]")]
 
-        public ActionResult<List<PathModel>> GetPathSearchBy([FromQuery]PathSearchModel pathSearchModel=null)
+        public async Task<ActionResult<List<PathModel>>> GetPathSearchBy([FromQuery]PathSearchModel pathSearchModel=null)
         {
+             
             try
             {
-                List<PathModel> paths= _pathService.GetPathsByCity(pathSearchModel);
+                List<PathModel> paths=await  _pathService.GetPathsByCity(pathSearchModel);
                 
                 if (paths == null)
                     // return NotFound($"Couldn't find any paths in city {pathSearchModel.City}");

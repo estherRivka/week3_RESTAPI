@@ -8,6 +8,7 @@ using CoronaApp.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CoronaApp.Services
 {
@@ -24,19 +25,19 @@ namespace CoronaApp.Services
      
      
 
-        public List<PathModel> GetAllPaths()
+        public async Task<List<PathModel>> GetAllPaths()
         {
-            List<Path> paths= _pathRepository.GetAllPaths();
+            List<Path> paths=await _pathRepository.GetAllPaths();
             if (paths == null)
                 return null;
             return _mapper.Map<List<PathModel>>(paths);
         }
 
 
-        public List<PathModel> GetPathsByCity(PathSearchModel locationSearchModel)
+        public async Task<List<PathModel>> GetPathsByCity(PathSearchModel locationSearchModel)
         {
             PathSearch locationSearch= _mapper.Map<PathSearch>(locationSearchModel);
-           List<Path> listOfLocations= _pathRepository.GetPathsByCity(locationSearch);
+           List<Path> listOfLocations=await _pathRepository.GetPathsByCity(locationSearch);
             if (listOfLocations == null)
                 return null;
             return _mapper.Map<List<PathModel>>(listOfLocations);

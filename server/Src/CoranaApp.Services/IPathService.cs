@@ -2,12 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CoronaApp.Services
 {
     public interface IPathService
     {
-        List<PathModel> GetAllPaths();
-        List<PathModel> GetPathsByCity(PathSearchModel locationSearch);
+        Task<List<PathModel>> GetAllPaths();
+        Task<List<PathModel>> GetPathsByCity(PathSearchModel locationSearch);
     }
 }

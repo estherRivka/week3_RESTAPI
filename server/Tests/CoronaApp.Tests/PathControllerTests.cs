@@ -22,7 +22,7 @@ namespace CoronaApp.Tests
             var client = _factory.CreateClient();
 
             // Act
-            var response = await client.GetAsync("/api/path/jj");
+            var response = await client.GetAsync("/api/path?GetPathSearchBy?pathSearchModel.City=city");
 
             // Assert
             response.EnsureSuccessStatusCode();

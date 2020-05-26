@@ -1,14 +1,14 @@
 ﻿using CoronaApp.Entities;
 using CoronaApp.Services;
-//using CoronaApp.Services.Entities;
 using Microsoft.AspNetCore.Mvc;
+//using CoronaApp.Services.Entities;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.Serialization;
 using System.Text;
-
 
 
 namespace CoronaApp.Dal

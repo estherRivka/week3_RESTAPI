@@ -30,11 +30,11 @@ namespace CoronaApp.Api.Controllers
 
         [EnableCors]
         [HttpGet("{id:int}")]
-        public ActionResult<PatientModel> GetById(int id)
+        public async Task<ActionResult<PatientModel>> GetById(int id)
         {
             try
             {
-                PatientModel patient = _patientService.GetById(id);
+                PatientModel patient = await _patientService.GetById(id);
                 if (patient == null)
                 {
                     return NotFound($"patient with id:{id} was not found");
@@ -53,13 +53,13 @@ namespace CoronaApp.Api.Controllers
 
         // POST: api/Path
         [HttpPost]
-        public ActionResult<PatientModel> Save(PatientModel newPatient)
+        public async Task<ActionResult<PatientModel>> Save(PatientModel newPatient)
         {
             try
             {
 
 
-                PatientModel patient = _patientService.Save(newPatient);
+                PatientModel patient =  await _patientService.Save(newPatient);
                 if (patient == null)
                 {
                     return BadRequest($"patient with id:{newPatient.PatientId} already exists");
@@ -85,17 +85,17 @@ namespace CoronaApp.Api.Controllers
 
         // PUT: api/Path/5
         [HttpPut]
-        public ActionResult<PatientModel> Update(PatientModel updatedPatient)
+        public async Task<ActionResult<PatientModel>> Update(PatientModel updatedPatient)
         {
             try
             {
-                PatientModel patient = _patientService.Update(updatedPatient);
+                PatientModel patient =  await _patientService.Update(updatedPatient);
                 if (patient == null)
                 {
                     return BadRequest($"patient with id:{updatedPatient.PatientId} was not found");
                 }
 
-                return _patientService.Update(updatedPatient);
+                return await _patientService.Update(updatedPatient);
             }
             catch (Exception e)
             {

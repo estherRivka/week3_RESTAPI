@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CoronaApp.Services
 {
@@ -19,9 +20,9 @@ namespace CoronaApp.Services
             _mapper = mapper;
         }
 
-        public PatientModel GetById(int id)
+        public async Task<PatientModel> GetById(int id)
         {
-            Patient patient = _patientRepository.GetById(id);
+            Patient patient = await _patientRepository.GetById(id);
             if (patient == null)
             {
                 return null;
@@ -30,9 +31,9 @@ namespace CoronaApp.Services
             return _mapper.Map<PatientModel>(patient);
         }
 
-        public PatientModel Save(PatientModel newPatient)
+        public async Task<PatientModel> Save(PatientModel newPatient)
         {
-            Patient patient = _patientRepository.GetById(newPatient.PatientId);
+            Patient patient = await _patientRepository.GetById(newPatient.PatientId);
 
             if (patient != null)
             {
@@ -44,13 +45,13 @@ namespace CoronaApp.Services
             {
                 path.PatientId = patient.Id;
             }
-            Patient newPatientFromDbs = _patientRepository.Save(patient);
+            Patient newPatientFromDbs = await _patientRepository.Save(patient);
             return _mapper.Map<PatientModel>(newPatientFromDbs);
         }
 
-        public PatientModel Update(PatientModel updatedPatient)
+        public async Task<PatientModel> Update(PatientModel updatedPatient)
         {
-            Patient patient = _patientRepository.GetById(updatedPatient.PatientId);
+            Patient patient = await _patientRepository.GetById(updatedPatient.PatientId);
             if (patient == null)
             {
                 return null;
@@ -61,7 +62,7 @@ namespace CoronaApp.Services
                 path.PatientId = patient.Id;
             }
 
-            Patient updatedPatientFromDbs = _patientRepository.Update(patient);
+            Patient updatedPatientFromDbs = await _patientRepository.Update(patient);
             return _mapper.Map<PatientModel>(updatedPatientFromDbs);
 
         }

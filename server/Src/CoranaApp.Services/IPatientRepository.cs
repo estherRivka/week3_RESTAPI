@@ -2,15 +2,16 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CoronaApp.Services
 {
     public interface IPatientRepository
     {
-        Patient GetById(int id);
+        Task<Patient> GetById(int id);
 
-        Patient Update(Patient patient);
-        Patient Save(Patient newPatient);
+        Task<Patient> Update(Patient patient);
+        Task<Patient> Save(Patient newPatient);
         //void Delete(int id);
     }
 }

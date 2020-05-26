@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace CoronaApp.Entities
+namespace entitiestemp
 {
-    public class Path
+    public partial class Paths
     {
         public int Id { get; set; }
         public string City { get; set; }
@@ -10,5 +11,7 @@ namespace CoronaApp.Entities
         public DateTime EndDate { get; set; }
         public string Location { get; set; }
         public int PatientId { get; set; }
+
+        public virtual Patients Patient { get; set; }
     }
 }

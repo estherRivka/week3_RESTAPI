@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -34,7 +35,10 @@ namespace CoronaApp.Api
             services.AddScoped(typeof(IPathRepository), typeof(PathRepository));
             services.AddScoped(typeof(IPathService), typeof(PathService));
             services.AddScoped(typeof(IPatientService), typeof(PatientService));
-           
+
+            services.AddDbContext<CoronaContext>(options => options.UseSqlServer
+            (Configuration.GetConnectionString("CoronaDBConnectionString")));
+
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
            // services.AddTransient<IPatientRepository, PatientRepository>();

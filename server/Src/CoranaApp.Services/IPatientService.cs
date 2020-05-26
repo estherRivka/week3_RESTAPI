@@ -3,14 +3,15 @@ using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CoronaApp.Services
 {
     public interface IPatientService
     {
-        PatientModel GetById(int id);
-        PatientModel Save(PatientModel newPatient);
-        PatientModel Update(PatientModel updatedPatient);
+        Task<PatientModel> GetById(int id);
+        Task<PatientModel> Save(PatientModel newPatient);
+        Task<PatientModel> Update(PatientModel updatedPatient);
          //Delete(int id);
     }
 }

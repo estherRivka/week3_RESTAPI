@@ -24,7 +24,10 @@ namespace CoronaApp.Tests
             var response = await client.GetAsync("/api/patient/1");
 
             // Assert
-            response.EnsureSuccessStatusCode(); 
+            response.EnsureSuccessStatusCode();
+
         }
+
+        
     }
 }

@@ -2,9 +2,11 @@
 using AutoMapper;
 using CoronaApp.Entities;
 using CoronaApp.Services;
-
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CoronaApp.Dal
 {
@@ -26,34 +28,38 @@ namespace CoronaApp.Dal
             }
 
         };
-        private IMapper _mapper;
-        public PatientRepository(IMapper mapper)
+        private readonly IMapper _mapper;
+        private readonly CoronaContext _dbContext;
+        public PatientRepository(IMapper mapper, CoronaContext dbContext)
         {
+            _dbContext = dbContext;
             _mapper = mapper;
         }
 
-       public Patient GetById(int id) 
+       public async Task<Patient> GetById(int id)
         {
-            Patient patient = patients
-               .Find(patient => patient.Id == id);
-            return patient;
+            //    Patient patient = patients
+            //       .Find(patient => patient.Id == id);
+            //    return patient;
+          return await  _dbContext.Patients.Where(patient => patient.Id == id).FirstOrDefaultAsync();
         }
-        public Patient Save(Patient newPatient)
+        public async Task<Patient> Save(Patient newPatient)
         {
-            patients.Add(newPatient);
+            _dbContext.Patients.Add(newPatient);
+           await  _dbContext.SaveChangesAsync();
             return newPatient;
         }
-        public Patient Update(Patient updatedPatient)
+        public async Task<Patient> Update(Patient updatedPatient)
         {
-            Patient patientToUpdate = patients
-                        .Find(patient => patient.Id == updatedPatient.Id);
+            Patient patientToUpdate = await _dbContext.Patients.Where(patient => patient.Id == updatedPatient.Id).FirstOrDefaultAsync();
 
-            
+
             if (patientToUpdate == null)
             {
                 return null;
             }
              _mapper.Map(updatedPatient, patientToUpdate);
+            await _dbContext.SaveChangesAsync();
             return patientToUpdate;
         }
         //delete()

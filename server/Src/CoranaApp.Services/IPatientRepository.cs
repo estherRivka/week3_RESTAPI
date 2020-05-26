@@ -9,8 +9,8 @@ namespace CoronaApp.Services
     {
         Patient GetById(int id);
 
-        void Update(Patient patient);
-        void Save(Patient newPatient);
+        Patient Update(Patient patient);
+        Patient Save(Patient newPatient);
         //void Delete(int id);
     }
 }

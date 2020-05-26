@@ -33,14 +33,21 @@ namespace CoronaApp.Services
         public PatientModel Save(PatientModel newPatient)
         {
             Patient patient = _patientRepository.GetById(newPatient.PatientId);
+
             if (patient != null)
             {
                 return null;
             }
-            _patientRepository.Save(_mapper.Map<Patient>(newPatient));
-            return newPatient;
 
+            patient = _mapper.Map<Patient>(newPatient);
+            foreach (var path in patient.Paths)
+            {
+                path.PatientId = patient.Id;
+            }
+            Patient newPatientFromDbs = _patientRepository.Save(patient);
+            return _mapper.Map<PatientModel>(newPatientFromDbs);
         }
+
         public PatientModel Update(PatientModel updatedPatient)
         {
             Patient patient = _patientRepository.GetById(updatedPatient.PatientId);
@@ -49,8 +56,13 @@ namespace CoronaApp.Services
                 return null;
             }
             patient = _mapper.Map<Patient>(updatedPatient);
-            _patientRepository.Update(patient);
-            return _mapper.Map<PatientModel>(patient);
+            foreach (var path in patient.Paths)
+            {
+                path.PatientId = patient.Id;
+            }
+
+            Patient updatedPatientFromDbs = _patientRepository.Update(patient);
+            return _mapper.Map<PatientModel>(updatedPatientFromDbs);
 
         }
 

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.Serialization;
 using System.Text;
@@ -30,6 +31,22 @@ namespace CoronaApp.Dal
              return paths;
         }
 
+
+        public async Task<List<Path>> GetPathsByProperty(PathSearch locationSearch)
+        {
+
+            List<Path> PathsInPropery = await _dbcontext.Paths
+            .Where(path => path
+                .GetType()
+                .GetProperty(locationSearch.searchByProperty.ToString())
+                .GetValue(path) == locationSearch
+                .GetType()
+                .GetProperty(locationSearch.searchByProperty.ToString())
+                .GetValue(locationSearch)
+  ).ToListAsync();
+
+            return PathsInPropery;
+        }
         public async Task<List<Path>> GetPathsByAge(PathSearch locationSearch)
         {
 

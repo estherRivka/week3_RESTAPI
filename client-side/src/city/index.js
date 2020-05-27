@@ -28,7 +28,7 @@ function getAllLocationsFromServer(URLPath) {
 function getLocationsFromServerByCity(URLPath,city) {
     return new Promise((resolve, reject) => {
         $.ajax({
-            url: `${URLPath}/GetPathSearchBy?pathSearchModel.City=${city}`, success: function (result) {
+            url: `${URLPath}/GetPathSearchBy?pathSearch.City=${city}`, success: function (result) {
                 resolve(result);
             },
             error: function (result) {
@@ -45,7 +45,7 @@ function getLocationsFromServerByDate(URLPath,startDate,EndDate) {
     return new Promise((resolve, reject) => {
         $.ajax({
             // `${URLPath}/GetAllPaths`
-            url: `${URLPath}/GetPathSearchBy?pathSearchModel.DateStart=${startDate}&pathSearchModel.DateEnd=${EndDate}`, success: function (result) {
+            url: `${URLPath}/GetPathSearchBy?pathSearch.DateStart=${startDate}&pathSearch.DateEnd=${EndDate}`, success: function (result) {
                 resolve(result);
             },
             error: function (result) {

@@ -43,7 +43,11 @@ namespace CoronaApp.Services
                 listOfLocations = await _pathRepository.GetPathsByCity(locationSearch);
 
             }
+           else  if (locationSearchModel.Age != 0)
+            {
+                listOfLocations = await _pathRepository.GetPathsByAge(locationSearch);
 
+            }
             else  if (locationSearchModel.DateStart != null && locationSearchModel.DateEnd != null)
             {
                 listOfLocations = await _pathRepository.GetPathsByDate(locationSearch);

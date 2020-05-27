@@ -1,4 +1,5 @@
-﻿using CoronaApp.Services.Models;
+﻿using CoronaApp.Entities;
+using CoronaApp.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,6 +10,6 @@ namespace CoronaApp.Services
     public interface IPathService
     {
         Task<List<PathModel>> GetAllPaths();
-        Task<List<PathModel>> GetPathsByCity(PathSearchModel locationSearch);
+        Task<List<PathModel>> GetPathsBySearch(PathSearch locationSearch);
     }
 }

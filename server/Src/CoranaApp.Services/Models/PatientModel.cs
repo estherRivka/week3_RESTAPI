@@ -6,5 +6,6 @@ namespace CoronaApp.Services.Models
     {
         public int PatientId { get; set; }
         public List<PathModel> Paths { get; set; }
+        public int Age { get; set; }
     }
 }

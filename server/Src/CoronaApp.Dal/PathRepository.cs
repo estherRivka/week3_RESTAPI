@@ -1,10 +1,11 @@
-﻿using CoronaApp.Entities;
+﻿
+using CoronaApp.Entities;
 using CoronaApp.Services;
-//using CoronaApp.Services.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.Serialization;
@@ -20,24 +21,23 @@ namespace CoronaApp.Dal
         {
             _dbcontext = dbContext;
         }
-        [HttpGet]
+      
         public async Task<List<Path>> GetAllPaths()
         {
 
             List<Path> paths = await _dbcontext.Paths.ToListAsync();
-             //  List<Path> paths = DataFormat.GetAllPaths();
+          
              return paths;
         }
 
-        [HttpGet("{locationSearch}")]
-        public async Task<List<Path>> GetPathsByCity([FromQuery] PathSearch locationSearch)
+        public async Task<List<Path>> GetPathsByCity( PathSearch locationSearch)
         {
              List<Path> paths = await _dbcontext.Paths.ToListAsync();
-            //List<Path> paths = DataFormat.GetAllPaths();
+           
             if (paths == null || !paths.Any())
                 return null;
                     //throw new Exception("couldnt find any paths!");
-             //  List<Path> PathsInCity = paths.FindAll(path => path.City == locationSearch.City);
+             
             List<Path> PathsInCity =await _dbcontext.Paths.Where(path => path.City == locationSearch.City).ToListAsync();
 
             if (PathsInCity == null || !PathsInCity.Any())
@@ -47,7 +47,58 @@ namespace CoronaApp.Dal
                 
            
         }
+        public async Task<List<Path>> GetPathsByDate(PathSearch locationSearch)
+        {
+            List<Path> paths = await _dbcontext.Paths.ToListAsync();
 
-       
+            if (paths == null || !paths.Any())
+                return null;
+            //throw new Exception("couldnt find any paths!");
+            //  DateTime.ParseExact(locationSearch.DateStart, "dd/MM/YYYY", CultureInfo.InvariantCulture)
+            List<Path> PathsInDate = await _dbcontext.Paths.Where(path => path.StartDate > DateTime.ParseExact(locationSearch.DateStart, "dd/mm/yyyy", null) && path.EndDate < DateTime.ParseExact(locationSearch.DateEnd, "dd/mm/yyyy", null)).ToListAsync();
+
+            if (PathsInDate == null || !PathsInDate.Any())
+                // throw new Exception("couldnt find any paths in this city!");
+                return null;
+            return PathsInDate;
+
+
+        }
+
+        public async Task<List<Path>> GetPathsByStartDate(PathSearch locationSearch)
+        {
+            List<Path> paths = await _dbcontext.Paths.ToListAsync();
+
+            if (!paths.Any())
+                return null;
+            //throw new Exception("couldnt find any paths!");
+            //  DateTime.ParseExact(strDate, "dd/MM/YYYY", CultureInfo.InvariantCulture)
+           // DateTime.ParseExact(m.StartDate, "dd/mm/yyyy", null)
+            List<Path> PathsInDate = await _dbcontext.Paths.Where(path => path.StartDate > DateTime.ParseExact(locationSearch.DateStart, "dd/mm/yyyy", null) ).ToListAsync();
+
+            if (PathsInDate == null || !PathsInDate.Any())
+                // throw new Exception("couldnt find any paths in this city!");
+                return null;
+            return PathsInDate;
+
+
+        }
+        public async Task<List<Path>> GetPathsByEndDate(PathSearch locationSearch)
+        {
+            List<Path> paths = await _dbcontext.Paths.ToListAsync();
+
+            if (!paths.Any())
+                return null;
+            //throw new Exception("couldnt find any paths!");
+            //  DateTime.ParseExact(strDate, "dd/MM/YYYY", CultureInfo.InvariantCulture)
+            List<Path> PathsInDate = await _dbcontext.Paths.Where(path => path.EndDate < DateTime.ParseExact(locationSearch.DateEnd, "dd/mm/yyyy", null)).ToListAsync();
+
+            if (PathsInDate == null || !PathsInDate.Any())
+                // throw new Exception("couldnt find any paths in this city!");
+                return null;
+            return PathsInDate;
+
+
+        }
     }
 }

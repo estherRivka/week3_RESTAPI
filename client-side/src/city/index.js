@@ -13,7 +13,8 @@ window.addEventListener('load', loadHtmlPage);
 function getAllLocationsFromServer(URLPath) {
     return new Promise((resolve, reject) => {
         $.ajax({
-            url: URLPath, success: function (result) {
+            // `${URLPath}/GetAllPaths`
+            url: `${URLPath}/GetAllPaths`, success: function (result) {
                 resolve(result);
             },
             error: function (result) {
@@ -27,7 +28,7 @@ function getAllLocationsFromServer(URLPath) {
 function getLocationsFromServerByCity(URLPath,city) {
     return new Promise((resolve, reject) => {
         $.ajax({
-            url: URLPath + '/'+'GetPathSearchBy?pathSearchModel.City='+city, success: function (result) {
+            url: `${URLPath}/GetPathSearchBy?pathSearchModel.City=${city}`, success: function (result) {
                 resolve(result);
             },
             error: function (result) {
@@ -39,6 +40,23 @@ function getLocationsFromServerByCity(URLPath,city) {
 
 
 }
+
+function getLocationsFromServerByDate(URLPath,startDate,EndDate) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            // `${URLPath}/GetAllPaths`
+            url: `${URLPath}/GetPathSearchBy?pathSearchModel.DateStart=${startDate}&pathSearchModel.DateEnd=${EndDate}`, success: function (result) {
+                resolve(result);
+            },
+            error: function (result) {
+                reject(result);
+            }
+        });
+    });
+
+
+}
+
 function getCulumnNamesData(locationsDataset) {
     return Object.keys(locationsDataset[0]);
 }
@@ -75,6 +93,22 @@ function loadHtmlPage() {
         //statusOfElement(btnSearchSubmit,true);
     }
 
+    
+        if (isNotNull(document.getElementById("btnByDates")) === true)
+        {
+            document.getElementById("btnByDates").addEventListener("click", function () {
+                if (isNotNull(document.getElementById("dateSearchfrom")) === true && isNotNull(document.getElementById("dateSearchtill")) === true) {
+                    const fromDate = document.getElementById("dateSearchfrom").value;
+                    const tillDate = document.getElementById("dateSearchtill").value;
+                    if(fromDate=='' || tillDate=='')
+                    alert('you must put values in dates inputs!');
+                   // getAllLocationsFromServerByDate(URLPath,fromDate,tillDate);
+                    showResultsFilterdByDate(URLPath,fromDate,tillDate);
+                }
+        });
+
+        }
+        
     if (isNotNull(document.getElementById("getAllLocations")) === true)
         document.getElementById("getAllLocations").addEventListener("click", function () {
             getAllLocationsOfPatience();
@@ -92,7 +126,7 @@ function loadHtmlPage() {
         createTable(result);
     }).catch(result => {
         alert(result.responseText);
-    });;
+    });
 
 }
 
@@ -295,3 +329,17 @@ function showResultsFilterdByCity(city) {
 
 
 }
+function showResultsFilterdByDate(url,fromDate,tillDate) {
+    const pathsSortedByInput = [];
+    getLocationsFromServerByDate(URLPath,fromDate,tillDate).then(result => {
+        createTable(result);
+        if (isNotNull(document.getElementById("getAllLocations")) === true)
+            statusOfElement(document.getElementById("getAllLocations"), false);
+    }).catch(result => {
+        alert(result.responseText);
+    });
+
+
+
+}
+

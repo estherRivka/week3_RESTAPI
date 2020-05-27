@@ -29,7 +29,19 @@ h1 {
     left: 595px;
     width: 100px;
 }
-
+#dateSearchfrom{
+    width:20%;
+    position: relative;
+    top: 120px;
+    left: 520px;
+   
+}
+#dateSearchtill{
+    width:20%;
+    position: relative;
+    top: 190px;
+    left: 790px;
+}
 input {
     border: 1px solid transparent;
     background-color: #f1f1f1;
@@ -39,7 +51,7 @@ input {
 
     input[type=text] {
         background-color: #f1f1f1;
-        width: 100%;
+        /* width: 100%; */
     }
 
     input[type=submit] {
@@ -92,6 +104,6 @@ input {
 
 #backToHomePage {
     position: relative;
-    top: 90px;
-    left: 800px;
+    top: 200px;
+    left: 600px;
 }

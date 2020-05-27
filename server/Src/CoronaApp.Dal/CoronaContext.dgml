@@ -15,15 +15,16 @@ TypeMapping: Microsoft.EntityFrameworkCore.Storage.IntTypeMapping" IsPrimaryKey=
 <Node Id = "Path.PatientId" Label="PatientId" Name="PatientId" Category="Property Foreign" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="TypeMapping: Microsoft.EntityFrameworkCore.Storage.IntTypeMapping" IsPrimaryKey="False" IsForeignKey="True" IsRequired="True" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
 <Node Id = "Path.StartDate" Label="StartDate" Name="StartDate" Category="Property Required" Type="DateTime" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="TypeMapping: Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerDateTimeTypeMapping" IsPrimaryKey="False" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
 <Node Id = "Patient" Label="Patient" Name="Patient" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="" Category="EntityType" Group="Expanded" />
-<Node Id = "Patient.Id" Label="Id" Name="Id" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="SqlServer:ValueGenerationStrategy: IdentityColumn
+<Node Id = "Patient.PatientId" Label="PatientId" Name="PatientId" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="SqlServer:ValueGenerationStrategy: IdentityColumn
 TypeMapping: Microsoft.EntityFrameworkCore.Storage.IntTypeMapping" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="ValueGenerated.OnAdd" />
 <Node Id = "Patient.Paths" Label="Paths (1)" Name="Paths" Category="Navigation Property" Type="Collectio"  Field="List&lt;Path&gt;" Dependent="Path" Principal="" Inverse="" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Patient.Age" Label="Age" Name="Age" Category="Property Required" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="TypeMapping: Microsoft.EntityFrameworkCore.Storage.IntTypeMapping" IsPrimaryKey="False" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
   </Nodes>
   <Links>
 <Link Source = "IModel" Target="Path" Category="Contains" />
 <Link Source = "IModel" Target="Patient" Category="Contains" />
 <Link Source = "Path" Target="Path.Id" Category="Contains" />
-<Link Source="Path" Target="Patient" From="Path.PatientId" To="Patient.Id" Name="Path -> Patient" Annotations="" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source="Path" Target="Patient" From="Path.PatientId" To="Patient.PatientId" Name="Path -> Patient" Annotations="" IsUnique="False" Label="1:*" Category="Foreign Key" />
 <Link Source = "Path" Target="Path.City" Category="Contains" />
 <Link Source = "Path" Target="Path.EndDate" Category="Contains" />
 <Link Source = "Path" Target="Path.Location" Category="Contains" />
@@ -31,7 +32,8 @@ TypeMapping: Microsoft.EntityFrameworkCore.Storage.IntTypeMapping" IsPrimaryKey=
 <Link Source = "Path" Target="Path.StartDate" Category="Contains" />
 <Link Source = "IModel" Target="Patient" Category="Contains" />
 <Link Source = "Patient" Target="Patient.Paths" Category="Contains" />
-<Link Source = "Patient" Target="Patient.Id" Category="Contains" />
+<Link Source = "Patient" Target="Patient.PatientId" Category="Contains" />
+<Link Source = "Patient" Target="Patient.Age" Category="Contains" />
   </Links>
   <Styles>
     <Style TargetType="Node" GroupLabel="EntityType" ValueLabel="True">

@@ -2,11 +2,9 @@
 using AutoMapper;
 using CoronaApp.Entities;
 using CoronaApp.Services.Models;
-//using CoronaApp.Models;
-//using CoronaApp.Services.Entities;
-//using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -34,11 +32,26 @@ namespace CoronaApp.Services
         }
 
 
-        public async Task<List<PathModel>> GetPathsByCity(PathSearchModel locationSearchModel)
+        public async Task<List<PathModel>> GetPathsBySearch(PathSearch locationSearchModel)
         {
             PathSearch locationSearch= _mapper.Map<PathSearch>(locationSearchModel);
-           List<Path> listOfLocations=await _pathRepository.GetPathsByCity(locationSearch);
-            if (listOfLocations == null)
+            
+            List<Path> listOfLocations = new List<Path>();
+            //= await _pathRepository.GetPathsByCity(locationSearch);
+
+            if(locationSearchModel.City != null)
+                listOfLocations = await _pathRepository.GetPathsByCity(locationSearch);
+
+            if (locationSearchModel.DateStart != null && locationSearchModel.DateEnd != null)
+                listOfLocations = await _pathRepository.GetPathsByDate(locationSearch);
+
+            if (locationSearchModel.DateStart != null)
+                listOfLocations = await _pathRepository.GetPathsByStartDate(locationSearch);
+
+            if (locationSearchModel.DateEnd != null)
+                listOfLocations = await _pathRepository.GetPathsByEndDate(locationSearch);
+
+            if (listOfLocations==null || !listOfLocations.Any())
                 return null;
             return _mapper.Map<List<PathModel>>(listOfLocations);
         }

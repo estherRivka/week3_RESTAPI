@@ -12,5 +12,8 @@ namespace CoronaApp.Entities
         public DateTime EndDate { get; set; }
         public string Location { get; set; }
         public int PatientId { get; set; }
+
+        public virtual Patient Patient { get; set; }
+
     }
 }

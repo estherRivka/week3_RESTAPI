@@ -30,18 +30,28 @@ namespace CoronaApp.Dal
              return paths;
         }
 
+        public async Task<List<Path>> GetPathsByAge(PathSearch locationSearch)
+        {
+
+            List<Path> paths = await _dbcontext.Paths.Include(p => p.Patient)
+                .Where(path => path.Patient.Age == locationSearch.Age)
+                .ToListAsync();
+
+            return paths;
+
+
+        }
         public async Task<List<Path>> GetPathsByCity( PathSearch locationSearch)
         {
              List<Path> paths = await _dbcontext.Paths.ToListAsync();
            
             if (paths == null || !paths.Any())
                 return null;
-                    //throw new Exception("couldnt find any paths!");
-             
+                
             List<Path> PathsInCity =await _dbcontext.Paths.Where(path => path.City == locationSearch.City).ToListAsync();
 
             if (PathsInCity == null || !PathsInCity.Any())
-                // throw new Exception("couldnt find any paths in this city!");
+                
                 return null;
                 return PathsInCity;
                 

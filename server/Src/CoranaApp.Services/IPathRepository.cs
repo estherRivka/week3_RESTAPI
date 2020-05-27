@@ -15,6 +15,9 @@ namespace CoronaApp.Services
         Task<List<Path>> GetPathsByStartDate(PathSearch locationSearch);
 
         Task<List<Path>> GetPathsByEndDate(PathSearch locationSearch);
+        Task<List<Path>> GetPathsByAge(PathSearch locationSearch);
+
+        
 
 
     }

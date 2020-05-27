@@ -100,8 +100,8 @@ function loadHtmlPage() {
                 if (isNotNull(document.getElementById("dateSearchfrom")) === true && isNotNull(document.getElementById("dateSearchtill")) === true) {
                     const fromDate = document.getElementById("dateSearchfrom").value;
                     const tillDate = document.getElementById("dateSearchtill").value;
-                    if(fromDate=='' || tillDate=='')
-                    alert('you must put values in dates inputs!');
+                   // if(fromDate=='' || tillDate=='')
+                   // alert('you must put values in dates inputs!');
                    // getAllLocationsFromServerByDate(URLPath,fromDate,tillDate);
                     showResultsFilterdByDate(URLPath,fromDate,tillDate);
                 }

@@ -36,8 +36,8 @@ namespace CoronaApp.Api
             services.AddScoped(typeof(IPathService), typeof(PathService));
             services.AddScoped(typeof(IPatientService), typeof(PatientService));
 
-            services.AddDbContext<CoronaContext>(options => options.UseSqlServer
-            (Configuration.GetConnectionString("CoronaDBConnectionString")));
+            //services.AddDbContext<CoronaContext>(options => options.UseSqlServer
+            //(Configuration.GetConnectionString("CoronaDBConnectionString")));
 
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
@@ -55,7 +55,7 @@ namespace CoronaApp.Api
 
             });
             services.AddDbContext<CoronaContext>(options => options.UseSqlServer
-           (Configuration.GetConnectionString("CoronaDBConnectionString")));
+           (Configuration.GetConnectionString("CoronaDBConnectionStringTzippy")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

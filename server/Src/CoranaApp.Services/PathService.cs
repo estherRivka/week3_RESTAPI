@@ -13,7 +13,7 @@ namespace CoronaApp.Services
     public class PathService : IPathService
     {
         private IPathRepository _pathRepository;
-        IMapper _mapper;
+        private IMapper _mapper;
         public PathService(IMapper mapper,IPathRepository pathRepository)
         {
             _pathRepository = pathRepository;
@@ -45,16 +45,28 @@ namespace CoronaApp.Services
             }
 
             else  if (locationSearchModel.DateStart != null && locationSearchModel.DateEnd != null)
+            {
                 listOfLocations = await _pathRepository.GetPathsByDate(locationSearch);
 
-           else if (locationSearchModel.DateStart != null)
+            }
+
+            else if (locationSearchModel.DateStart != null)
+            {
                 listOfLocations = await _pathRepository.GetPathsByStartDate(locationSearch);
 
-          else  if (locationSearchModel.DateEnd != null)
+            }
+
+            else  if (locationSearchModel.DateEnd != null)
+            {
                 listOfLocations = await _pathRepository.GetPathsByEndDate(locationSearch);
 
+            }
+
             if (listOfLocations==null || !listOfLocations.Any())
+            {
                 return null;
+            }
+                
             return _mapper.Map<List<PathModel>>(listOfLocations);
         }
     }

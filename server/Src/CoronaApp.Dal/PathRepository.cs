@@ -53,7 +53,7 @@ namespace CoronaApp.Dal
 
             if (paths == null || !paths.Any())
                 return null;
-          
+         
             List<Path> PathsInDate = await _dbcontext.Paths.Where(path => path.StartDate > locationSearch.DateStart && path.EndDate < locationSearch.DateEnd).ToListAsync();
           
             if (PathsInDate == null || !PathsInDate.Any())

@@ -53,6 +53,15 @@ namespace CoronaApp.Dal
 
 
         }
+
+        public async Task<List<Patient>> GetPatientsByAge(int age)
+        {
+            List<Patient> patients = await _dbContext.Patients
+                 .Where(patient => patient.Age == age)
+                 .Include(patient => patient.Paths).ToListAsync();
+            return patients;
+        }
+
         public async Task<Patient> Save(Patient newPatient)
         {
             _dbContext.Patients.Add(newPatient);

@@ -29,8 +29,7 @@ namespace CoronaApp.Api.Controllers
 
         // GET api/Patient/7
         [Route("[action]/{id:int}")]
-        [EnableCors]
-      
+        [EnableCors]     
         [HttpGet]
         public async Task<ActionResult<PatientModel>> GetById(int id)
         {
@@ -56,13 +55,12 @@ namespace CoronaApp.Api.Controllers
 
         [Route("[action]/{age:int}")]
         [EnableCors]
-        [HttpGet]
-       
-        public async Task<ActionResult<PatientModel>> GetPatientsByAge(int age)
+        [HttpGet] 
+        public async Task<ActionResult<List<PatientModel>>> GetPatientsByAge(int age)
         {
             try
             {
-                PatientModel patient = await _patientService.GetById(age);
+                List<PatientModel> patients = await _patientService.GetPatientsByAge(age);
                 //if (patient == null)
                 //{
                 //    return NotFound($"patient with id:{id} was not found");
@@ -71,7 +69,7 @@ namespace CoronaApp.Api.Controllers
                 //{
                 //    return patient;
                 //}
-                return patient;
+                return patients;
             }
             catch (Exception e)
             {

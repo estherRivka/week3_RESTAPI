@@ -8,7 +8,7 @@ window.onload = function () {
     configurePage(columnNames, columnKeys, patientControllerURL);
 };
 
-function getLocationsByPatientId(currentPatientId, url) {
+function getPatientById(currentPatientId, url) {
 
     var xhttp = new XMLHttpRequest();
 
@@ -23,7 +23,7 @@ function getLocationsByPatientId(currentPatientId, url) {
                 reject(this.status);
             }
         };
-        xhttp.open("GET", `${url}/${currentPatientId}`);
+        xhttp.open("GET", `${url}/GetById/${currentPatientId}`);
         xhttp.send();
     });
 
@@ -100,7 +100,7 @@ function configurePage(columnNames, columnKeys, patientURL) {
 
     if (viewLocationTableBtn !== null) {
         viewLocationTableBtn.addEventListener("click", async function () {
-            getLocationsByPatientId(patientId, patientURL)
+            getPatientById(patientId, patientURL)
             .then((currentPatientFromDbs)=>{
                    currentPatient= currentPatientFromDbs;
                     buildLocationTable(currentPatient, columnNames, columnKeys);

@@ -12,7 +12,7 @@ namespace CoronaApp.Services
 
         Task<Patient> Update(Patient patient);
         Task<Patient> Save(Patient newPatient);
-       // Task<List<Path>> GetPathsByPatientAge(PathSearch locationSearch);
+         Task<List<Patient>> GetPatientsByAge(int age);
 
         //void Delete(int id);
     }

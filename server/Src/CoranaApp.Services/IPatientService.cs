@@ -12,6 +12,7 @@ namespace CoronaApp.Services
         Task<PatientModel> GetById(int id);
         Task<PatientModel> Save(PatientModel newPatient);
         Task<PatientModel> Update(PatientModel updatedPatient);
-         //Delete(int id);
+        Task<List<PatientModel>> GetPatientsByAge(int age);
+        //Delete(int id);
     }
 }

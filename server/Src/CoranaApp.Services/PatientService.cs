@@ -31,6 +31,12 @@ namespace CoronaApp.Services
             return _mapper.Map<PatientModel>(patient);
         }
 
+        public async Task<List<PatientModel>> GetPatientsByAge(int age)
+        {
+          List<Patient> patients = await _patientRepository.GetPatientsByAge(age);
+            return _mapper.Map<List<PatientModel>>(patients);
+        }
+
         public async Task<PatientModel> Save(PatientModel newPatient)
         {
             Patient patient = await _patientRepository.GetById(newPatient.PatientId);

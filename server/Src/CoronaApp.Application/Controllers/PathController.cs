@@ -6,7 +6,6 @@ using AutoMapper;
 using CoronaApp.Entities;
 using CoronaApp.Services;
 using CoronaApp.Services.Models;
-//using EntitiesTemp;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -45,27 +44,24 @@ namespace CoronaApp.Api.Controllers
             }
             catch (Exception e)
             {
-                // return e.Message;
                 return StatusCode(StatusCodes.Status500InternalServerError, "Failed to get Paths");
             }
         }
         [EnableCors]
-        //[HttpGet("{pathSearch}")]
         [HttpGet]
 
-        public async Task<ActionResult<List<PathModel>>> GetPathSearchBy([FromQuery]PathSearch pathSearchModel)
+        public async Task<ActionResult<List<PathModel>>> GetPathSearchBy([FromQuery]PathSearch pathSearch)
         {
              
             try
             {
-                List<PathModel> paths=await  _pathService.GetPathsBySearch(pathSearchModel);
+                List<PathModel> paths=await  _pathService.GetPathsBySearch(pathSearch);
                 
                 if (paths == null)
-                    // return NotFound($"Couldn't find any paths in city {pathSearchModel.City}");
-                    return NotFound($"Couldn't find any paths in city {pathSearchModel.City}");
+                    return NotFound($"Couldn't find any paths in city {pathSearch.City}");
                 return paths;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Failed to get Paths");
             }

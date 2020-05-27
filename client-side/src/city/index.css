@@ -10,7 +10,11 @@ h1 {
     /* //position: relative; */
     /* //top:0px; */
 }
-
+#btnByDates{
+    position: relative;
+    top: 280px;
+    left: 295px;
+}
 .autocomplete {
     /*the container must be positioned relative:*/
     position: relative;
@@ -19,27 +23,39 @@ h1 {
 
 #getAllLocations {
     position: relative;
-    top: 20px;
+    top: 140px;
     left: 800px;
 }
 
 #sortTableByDate {
     position: relative;
-    top: 85px;
+    top: 180px;
     left: 595px;
     width: 100px;
 }
 #dateSearchfrom{
     width:20%;
     position: relative;
-    top: 120px;
-    left: 520px;
+    top: 170px;
+    left: 425px;
    
+}
+#lbldateSearchfrom{
+    position: relative;
+    top: 180px;
+    left: 775px;
+}
+#lbldateSearchtill{
+  
+
+    position: relative;
+    top: 240px;
+    left: 412px;
 }
 #dateSearchtill{
     width:20%;
     position: relative;
-    top: 190px;
+    top: 240px;
     left: 790px;
 }
 input {
@@ -104,6 +120,6 @@ input {
 
 #backToHomePage {
     position: relative;
-    top: 200px;
-    left: 600px;
+    top: 420px;
+    left: 120px;
 }

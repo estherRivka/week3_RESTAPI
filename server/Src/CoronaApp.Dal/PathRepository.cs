@@ -53,12 +53,10 @@ namespace CoronaApp.Dal
 
             if (paths == null || !paths.Any())
                 return null;
-            //throw new Exception("couldnt find any paths!");
-            //  DateTime.ParseExact(locationSearch.DateStart, "dd/MM/YYYY", CultureInfo.InvariantCulture)
-            List<Path> PathsInDate = await _dbcontext.Paths.Where(path => path.StartDate > DateTime.ParseExact(locationSearch.DateStart, "dd/mm/yyyy", null) && path.EndDate < DateTime.ParseExact(locationSearch.DateEnd, "dd/mm/yyyy", null)).ToListAsync();
-
+          
+            List<Path> PathsInDate = await _dbcontext.Paths.Where(path => path.StartDate > locationSearch.DateStart && path.EndDate < locationSearch.DateEnd).ToListAsync();
+          
             if (PathsInDate == null || !PathsInDate.Any())
-                // throw new Exception("couldnt find any paths in this city!");
                 return null;
             return PathsInDate;
 
@@ -73,8 +71,8 @@ namespace CoronaApp.Dal
                 return null;
             //throw new Exception("couldnt find any paths!");
             //  DateTime.ParseExact(strDate, "dd/MM/YYYY", CultureInfo.InvariantCulture)
-           // DateTime.ParseExact(m.StartDate, "dd/mm/yyyy", null)
-            List<Path> PathsInDate = await _dbcontext.Paths.Where(path => path.StartDate > DateTime.ParseExact(locationSearch.DateStart, "dd/mm/yyyy", null) ).ToListAsync();
+            // DateTime.ParseExact(m.StartDate, "dd/mm/yyyy", null)
+            List<Path> PathsInDate =await _dbcontext.Paths.Where(path => path.StartDate > locationSearch.DateStart ).ToListAsync();
 
             if (PathsInDate == null || !PathsInDate.Any())
                 // throw new Exception("couldnt find any paths in this city!");
@@ -91,7 +89,7 @@ namespace CoronaApp.Dal
                 return null;
             //throw new Exception("couldnt find any paths!");
             //  DateTime.ParseExact(strDate, "dd/MM/YYYY", CultureInfo.InvariantCulture)
-            List<Path> PathsInDate = await _dbcontext.Paths.Where(path => path.EndDate < DateTime.ParseExact(locationSearch.DateEnd, "dd/mm/yyyy", null)).ToListAsync();
+            List<Path> PathsInDate =await _dbcontext.Paths.Where(path => path.EndDate <locationSearch.DateEnd).ToListAsync();
 
             if (PathsInDate == null || !PathsInDate.Any())
                 // throw new Exception("couldnt find any paths in this city!");

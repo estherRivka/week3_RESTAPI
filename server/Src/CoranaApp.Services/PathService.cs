@@ -20,14 +20,13 @@ namespace CoronaApp.Services
             _mapper = mapper;
         }
 
-     
-     
-
         public async Task<List<PathModel>> GetAllPaths()
         {
-            List<Path> paths=await _pathRepository.GetAllPaths();
+            List<Path> paths = await _pathRepository.GetAllPaths();
             if (paths == null)
+            {
                 return null;
+            }
             return _mapper.Map<List<PathModel>>(paths);
         }
 
@@ -37,18 +36,21 @@ namespace CoronaApp.Services
             PathSearch locationSearch= _mapper.Map<PathSearch>(locationSearchModel);
             
             List<Path> listOfLocations = new List<Path>();
-            //= await _pathRepository.GetPathsByCity(locationSearch);
+           
 
             if(locationSearchModel.City != null)
+            {
                 listOfLocations = await _pathRepository.GetPathsByCity(locationSearch);
 
-            if (locationSearchModel.DateStart != null && locationSearchModel.DateEnd != null)
+            }
+
+            else  if (locationSearchModel.DateStart != null && locationSearchModel.DateEnd != null)
                 listOfLocations = await _pathRepository.GetPathsByDate(locationSearch);
 
-            if (locationSearchModel.DateStart != null)
+           else if (locationSearchModel.DateStart != null)
                 listOfLocations = await _pathRepository.GetPathsByStartDate(locationSearch);
 
-            if (locationSearchModel.DateEnd != null)
+          else  if (locationSearchModel.DateEnd != null)
                 listOfLocations = await _pathRepository.GetPathsByEndDate(locationSearch);
 
             if (listOfLocations==null || !listOfLocations.Any())

@@ -15,7 +15,7 @@ namespace CoronaApp.Api
         {
              this.CreateMap<Patient, Patient>();
             this.CreateMap<Patient, PatientModel>()
-                .ForMember(dest => dest.PatientId, opt => opt.MapFrom(m => m.Id))
+                .ForMember(dest => dest.PatientId, opt => opt.MapFrom(m => m.PatientId))
                 .ReverseMap();
          //       .ForMember(dest => dest.Paths., opt => opt.MapFrom(m => m.Id));
 

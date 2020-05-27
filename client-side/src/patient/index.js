@@ -2,10 +2,10 @@
 const patientControllerURL = "http://localhost:6060/api/patient";
 const columnNames = ["Start Date", "End Date", "City", "Location"];
 const columnKeys = ["startDate", "endDate", "city", "location"];
-let currentPatient = null;
+
 
 window.onload = function () {
-    configurePage(columnNames, columnKeys, patientControllerURL, currentPatient);
+    configurePage(columnNames, columnKeys, patientControllerURL);
 };
 
 function getLocationsByPatientId(currentPatientId, url) {
@@ -19,7 +19,8 @@ function getLocationsByPatientId(currentPatientId, url) {
                 resolve(JSON.parse(this.responseText));
             }
             if (this.readyState == 4 && this.status !== 200) {
-                reject("an error accured retrieving data");
+                debugger;
+                reject(this.status);
             }
         };
         xhttp.open("GET", `${url}/${currentPatientId}`);
@@ -51,11 +52,38 @@ function updatePatient(updatedPatient, url) {
 }
 
 
+function createNewPatient(patientId, url) {
 
-function configurePage(columnNames, columnKeys, patientURL, currentPatient) {
+    var xhttp = new XMLHttpRequest();
 
-    const patientIdInp = document.getElementById("patientIdInp");
+    return new Promise((resolve, reject) => {
+
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 201) {
+                resolve(JSON.parse(this.responseText));
+            }
+            if (this.readyState == 4 && this.status !== 200) {
+                reject(`an error accured creating patient with id ${patientId}`);
+            }
+        };
+        xhttp.open("POST", url);
+        xhttp.setRequestHeader('Content-Type', 'application/json');
+        xhttp.setRequestHeader('Accept', 'application/json');
+        xhttp.send(JSON.stringify({PatientId:patientId}));
+    });
+
+}
+
+
+
+
+function configurePage(columnNames, columnKeys, patientURL) {
+
+    let currentPatient;
     let patientId;
+    
+    const patientIdInp = document.getElementById("patientIdInp");
+    
     if (patientIdInp !== null) {
         patientIdInp.addEventListener("input", function () {
             patientId = parseInt(patientIdInp.value);
@@ -72,9 +100,30 @@ function configurePage(columnNames, columnKeys, patientURL, currentPatient) {
 
     if (viewLocationTableBtn !== null) {
         viewLocationTableBtn.addEventListener("click", async function () {
-            currentPatient = await getLocationsByPatientId(patientId, patientURL);
-            buildLocationTable(currentPatient, columnNames, columnKeys);
-            SetViewLocationBtnAvailability(false);
+            getLocationsByPatientId(patientId, patientURL)
+            .then((currentPatientFromDbs)=>{
+                   currentPatient= currentPatientFromDbs;
+                    buildLocationTable(currentPatient, columnNames, columnKeys);
+                    SetViewLocationBtnAvailability(false);
+               
+            })
+            .catch((statusCode)=>{
+                //returned with no value, patient doesnt exist
+                if (statusCode === 204){
+                    createNewPatient(patientId, patientURL)
+                    .then((currentPatientFromDbs)=>{
+                        currentPatient=currentPatientFromDbs;
+                        buildLocationTable(currentPatient, columnNames, columnKeys);
+                        SetViewLocationBtnAvailability(false);
+                    })
+                    .catch(console.log);
+                }
+                else{
+                    console.log("error occured retieving patient");
+                }
+                
+            });
+
         });
     }
 
@@ -171,13 +220,6 @@ function addRowToTable(table, newLocation, currentPatient, columnKeys) {
 
 }
 
-function sortLocationTableByColumn(currentPatient, columnNames, columnKeys, columnIndex) {
-
-    const sortByKey = columnKeys[columnIndex];
-    currentPatient.paths.sort((a, b) => a[sortByKey].localeCompare(b[sortByKey]));
-
-    buildLocationTable(currentPatient, columnNames, columnKeys);
-}
 
 async function addLocation(currentPatient, columnKeys) {
 
@@ -222,7 +264,7 @@ async function addLocation(currentPatient, columnKeys) {
         addRowToTable(locationsTable, newLocation, currentPatient, columnKeys);
 
         currentPatient.paths.push(newLocation);
-        const response = await updatePatient(currentPatient,"http://localhost:6060/api/patient");
+        const response = await updatePatient(currentPatient,patientControllerURL);
         console.log(response);
 
 
@@ -241,9 +283,19 @@ function deleteLocation(currentPatient, rowToDelete) {
 
     currentPatient.paths.splice(index - 1, 1);
 
-    updatePatient(currentPatient, "http://localhost:6060/patient");
+    updatePatient(currentPatient,patientControllerURL);
 
 }
+
+function sortLocationTableByColumn(currentPatient, columnNames, columnKeys, columnIndex) {
+
+    const sortByKey = columnKeys[columnIndex];
+    currentPatient.paths.sort((a, b) => a[sortByKey].localeCompare(b[sortByKey]));
+
+    buildLocationTable(currentPatient, columnNames, columnKeys);
+}
+
+
 
 
 

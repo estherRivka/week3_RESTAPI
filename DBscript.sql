@@ -10,8 +10,8 @@
 --GO
 
 CREATE TABLE [Patients] (
-    [Id] int NOT NULL IDENTITY,
-    CONSTRAINT [PK_Patients] PRIMARY KEY ([Id])
+	[PatientId] int	not null
+    CONSTRAINT [PK_Patients] PRIMARY KEY ([PatientId])
 );
 
 GO
@@ -24,7 +24,7 @@ CREATE TABLE [Paths] (
     [Location] nvarchar(max) NULL,
     [PatientId] int NOT NULL,
     CONSTRAINT [PK_Paths] PRIMARY KEY ([Id]),
-    CONSTRAINT [FK_Paths_Patients_PatientId] FOREIGN KEY ([PatientId]) REFERENCES [Patients] ([Id]) ON DELETE CASCADE
+    CONSTRAINT [FK_Paths_Patients_PatientId] FOREIGN KEY ([PatientId]) REFERENCES  [Patients]([PatientId]) ON DELETE CASCADE
 );
 
 GO

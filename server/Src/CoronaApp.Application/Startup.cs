@@ -41,7 +41,6 @@ namespace CoronaApp.Api
 
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
-           // services.AddTransient<IPatientRepository, PatientRepository>();
             services.AddCors(options =>
             {
                 options.AddPolicy("Policy1",

@@ -43,7 +43,7 @@ namespace CoronaApp.Services
             patient = _mapper.Map<Patient>(newPatient);
             foreach (var path in patient.Paths)
             {
-                path.PatientId = patient.Id;
+                path.PatientId = patient.PatientId;
             }
             Patient newPatientFromDbs = await _patientRepository.Save(patient);
             return _mapper.Map<PatientModel>(newPatientFromDbs);
@@ -59,7 +59,7 @@ namespace CoronaApp.Services
             patient = _mapper.Map<Patient>(updatedPatient);
             foreach (var path in patient.Paths)
             {
-                path.PatientId = patient.Id;
+                path.PatientId = patient.PatientId;
             }
 
             Patient updatedPatientFromDbs = await _patientRepository.Update(patient);

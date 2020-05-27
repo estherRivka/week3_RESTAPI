@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 
+
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace CoronaApp.Api.Controllers
@@ -20,7 +21,7 @@ namespace CoronaApp.Api.Controllers
     public class PathController : ControllerBase
     {
 
-
+      
         private readonly IMapper _mapper;
         private readonly IPathService _pathService;
         public PathController(IMapper mapper, IPathService pathService)

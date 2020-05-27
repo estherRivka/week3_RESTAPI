@@ -17,7 +17,7 @@ namespace CoronaApp.Api.Controllers
     [ApiController]
     public class PatientController : ControllerBase
     {
-        // GET api/<PatientController>/5
+        
         private readonly IPatientService _patientService;
         private readonly LinkGenerator _linkGenerator;
         public PatientController(IPatientService patientService, LinkGenerator linkGenerator)
@@ -27,22 +27,23 @@ namespace CoronaApp.Api.Controllers
 
         }
 
-
+        // GET api/Patient/7
         [EnableCors]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<PatientModel>> GetById(int id)
         {
             try
-            {
+            {        
                 PatientModel patient = await _patientService.GetById(id);
-                if (patient == null)
-                {
-                    return NotFound($"patient with id:{id} was not found");
-                }
-                else
-                {
-                    return patient;
-                }
+                //if (patient == null)
+                //{
+                //    return NotFound($"patient with id:{id} was not found");
+                //}
+                //else
+                //{
+                //    return patient;
+                //}
+                return patient;
             }
             catch (Exception e)
             {
@@ -57,17 +58,14 @@ namespace CoronaApp.Api.Controllers
         {
             try
             {
-
-
                 PatientModel patient =  await _patientService.Save(newPatient);
                 if (patient == null)
                 {
                     return BadRequest($"patient with id:{newPatient.PatientId} already exists");
                 }
-                var newPatientURI = _linkGenerator
-                        .GetPathByAction(HttpContext, "Get",
-               values: new { id = newPatient.PatientId }
-                       );
+
+              var newPatientURI =  Url.Action(action: "GetById", values: new { id = newPatient.PatientId });
+
 
                 if (string.IsNullOrWhiteSpace(newPatientURI))
                 {
@@ -83,7 +81,7 @@ namespace CoronaApp.Api.Controllers
         }
 
 
-        // PUT: api/Path/5
+        // PUT: api/Patient
         [HttpPut]
         public async Task<ActionResult<PatientModel>> Update(PatientModel updatedPatient)
         {
@@ -105,7 +103,7 @@ namespace CoronaApp.Api.Controllers
 
         }
 
-        // DELETE: api/ApiWithActions/5
+        // DELETE: api/Patient/7
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {

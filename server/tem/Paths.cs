@@ -1,16 +1,17 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
-namespace CoronaApp.Entities
+namespace tem
 {
-    public class Path
+    public partial class Paths
     {
-       // [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string City { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Location { get; set; }
         public int PatientId { get; set; }
+
+        public virtual Patients Patient { get; set; }
     }
 }

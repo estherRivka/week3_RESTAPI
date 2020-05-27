@@ -6,8 +6,8 @@ namespace CoronaApp.Entities
     {
        
         public string City { get; set; }
-        public string DateEnd { get; set; }
-        public string DateStart { get; set; }
+        public DateTime DateEnd { get; set; }
+        public DateTime DateStart { get; set; }
         public int Age { get; set; }
 
     }

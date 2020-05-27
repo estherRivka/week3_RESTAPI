@@ -21,7 +21,6 @@ namespace CoronaApp.Api.Controllers
     public class PathController : ControllerBase
     {
 
-
         private readonly IMapper _mapper;
         private readonly IPathService _pathService;
         public PathController(IMapper mapper, IPathService pathService)
@@ -50,11 +49,11 @@ namespace CoronaApp.Api.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Failed to get Paths");
             }
         }
-
+        [EnableCors]
         //[HttpGet("{pathSearch}")]
         [HttpGet]
 
-        public async Task<ActionResult<List<PathModel>>> GetPathSearchBy([FromQuery]PathSearch pathSearchModel=null)
+        public async Task<ActionResult<List<PathModel>>> GetPathSearchBy([FromQuery]PathSearch pathSearchModel)
         {
              
             try

@@ -28,13 +28,41 @@ namespace CoronaApp.Api.Controllers
         }
 
         // GET api/Patient/7
+        [Route("[action]/{id:int}")]
         [EnableCors]
-        [HttpGet("{id:int}")]
+      
+        [HttpGet]
         public async Task<ActionResult<PatientModel>> GetById(int id)
         {
             try
             {        
                 PatientModel patient = await _patientService.GetById(id);
+                //if (patient == null)
+                //{
+                //    return NotFound($"patient with id:{id} was not found");
+                //}
+                //else
+                //{
+                //    return patient;
+                //}
+                return patient;
+            }
+            catch (Exception e)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure while retrieving patient" + e.StackTrace);
+            }
+
+        }
+
+        [Route("[action]/{age:int}")]
+        [EnableCors]
+        [HttpGet]
+       
+        public async Task<ActionResult<PatientModel>> GetPatientsByAge(int age)
+        {
+            try
+            {
+                PatientModel patient = await _patientService.GetById(age);
                 //if (patient == null)
                 //{
                 //    return NotFound($"patient with id:{id} was not found");

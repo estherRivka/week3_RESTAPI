@@ -7,5 +7,6 @@ namespace CoronaApp.Services.Models
         public string City { get; set; }
         public DateTime DateEnd { get; set; }
         public DateTime DateStart { get; set; }
+        public int Age { get; set; }
     }
 }

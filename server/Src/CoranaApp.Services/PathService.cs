@@ -37,34 +37,34 @@ namespace CoronaApp.Services
 
             List<Path> listOfLocations = new List<Path>();
 
-            //  listOfLocations= await _pathRepository.GetPathsByProperty(locationSearch);
-            if (locationSearch.City != null)
-            {
-                listOfLocations = await _pathRepository.GetPathsByCity(locationSearch);
+             listOfLocations= await _pathRepository.GetPathsByProperty(locationSearch);
+            //if (locationSearch.City != null)
+            //{
+            //    listOfLocations = await _pathRepository.GetPathsByCity(locationSearch);
 
-            }
-            else if (locationSearch.Age != 0)
-            {
-                listOfLocations = await _pathRepository.GetPathsByAge(locationSearch);
+            //}
+            //else if (locationSearch.Age != 0)
+            //{
+            //    listOfLocations = await _pathRepository.GetPathsByAge(locationSearch);
 
-            }
-            else if (locationSearch.DateStart != null && locationSearch.DateEnd != null)
-            {
-                listOfLocations = await _pathRepository.GetPathsByDate(locationSearch);
+            //}
+            //else if (locationSearch.DateStart != null && locationSearch.DateEnd != null)
+            //{
+            //    listOfLocations = await _pathRepository.GetPathsByDate(locationSearch);
 
-            }
+            //}
 
-            else if (locationSearch.DateStart != null)
-            {
-                listOfLocations = await _pathRepository.GetPathsByStartDate(locationSearch);
+            //else if (locationSearch.DateStart != null)
+            //{
+            //    listOfLocations = await _pathRepository.GetPathsByStartDate(locationSearch);
 
-            }
+            //}
 
-            else if (locationSearch.DateEnd != null)
-            {
-                listOfLocations = await _pathRepository.GetPathsByEndDate(locationSearch);
+            //else if (locationSearch.DateEnd != null)
+            //{
+            //    listOfLocations = await _pathRepository.GetPathsByEndDate(locationSearch);
 
-            }
+            //}
 
             if (listOfLocations == null || !listOfLocations.Any())
             {

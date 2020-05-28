@@ -7,11 +7,14 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace CoronaApp.Dal
 {
@@ -34,16 +37,32 @@ namespace CoronaApp.Dal
 
         public async Task<List<Path>> GetPathsByProperty(PathSearch locationSearch)
         {
+            Path path = new Path();
 
-            List<Path> PathsInPropery = await _dbcontext.Paths
-            .Where(path => path
+            PropertyInfo info = path
                 .GetType()
-                .GetProperty(locationSearch.searchByProperty.ToString())
-                .GetValue(path) == locationSearch
+                .GetProperty(locationSearch.searchByProperty.ToString());
+            PropertyInfo info1 = locationSearch
                 .GetType()
-                .GetProperty(locationSearch.searchByProperty.ToString())
-                .GetValue(locationSearch)
-  ).ToListAsync();
+                .GetProperty(locationSearch.searchByProperty.ToString());
+           
+            List<Path> PathsInPropery = await _dbcontext.Paths.ToListAsync();
+            for (int i = 0; i < PathsInPropery.Count(); i++)
+            {
+                if (string.Compare(info.GetValue(PathsInPropery[i]).ToString(), info1.GetValue(locationSearch).ToString()) == 0)
+
+                    PathsInPropery.Add(PathsInPropery[i]);
+            }
+
+            //List<Path> PathsInPropery1 = PathsInPropery.Where(path => info
+            // .GetValue(path) == info1
+            // .GetValue(locationSearch))
+            //    .ToList();
+            //List <Path> PathsInPropery = await _dbcontext.Paths
+            // .Where(path => info
+            //     .GetValue(path) == info
+            //     .GetValue(locationSearch))
+            //      .ToListAsync();
 
             return PathsInPropery;
         }

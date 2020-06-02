@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CoronaApp.Entities
@@ -9,6 +10,7 @@ namespace CoronaApp.Entities
         //  [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int PatientId { get; set; }
         public List<Path> Paths { get; set; }
+        [Required]
         public int Age { get; set; }
     }
 }

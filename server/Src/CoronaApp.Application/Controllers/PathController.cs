@@ -9,6 +9,7 @@ using CoronaApp.Services.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -33,38 +34,31 @@ namespace CoronaApp.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<List<PathModel>>> GetAllPaths()
         {
-
-            try
-            {
-                List<PathModel> paths =await _pathService.GetAllPaths();
+              List<PathModel> paths =await _pathService.GetAllPaths();
                
                 if (paths == null)
                     return NotFound("Couldn't find any paths");
+            Log.Information("successfull to add all paths {@paths}", paths);
+           
                 return paths;
-            }
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to get Paths");
-            }
+          
         }
         [EnableCors]
         [HttpGet]
 
         public async Task<ActionResult<List<PathModel>>> GetPathSearchBy([FromQuery]PathSearch pathSearch)
         {
-             
-            try
+                List<PathModel> paths = await _pathService.GetPathsBySearch(pathSearch);
+
+            if (paths == null)
             {
-                List<PathModel> paths=await  _pathService.GetPathsBySearch(pathSearch);
-                
-                if (paths == null)
-                    return NotFound($"Couldn't find any paths in city {pathSearch.City}");
-                return paths;
+                Log.Warning("Couldn't find any paths in city {@pathSearchByCity}", pathSearch.City);
+                return NotFound($"Couldn't find any paths in city {pathSearch.City}");
             }
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to get Paths");
-            }
+            Log.Information("succesfull to get paths in city {@pathSearchByCity}", paths);
+
+            return paths;
+          
         }
 
 

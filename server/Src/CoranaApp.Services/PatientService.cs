@@ -3,6 +3,7 @@ using AutoMapper;
 using CoronaApp.Entities;
 using CoronaApp.Services.Models;
 using Microsoft.AspNetCore.Routing;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -47,11 +48,9 @@ namespace CoronaApp.Services
             }
 
             patient = _mapper.Map<Patient>(newPatient);
-            foreach (var path in patient.Paths)
-            {
-                path.PatientId = patient.PatientId;
-            }
             Patient newPatientFromDbs = await _patientRepository.Save(patient);
+            Log.Information("Patient Created {@newPatient}", newPatient);
+
             return _mapper.Map<PatientModel>(newPatientFromDbs);
         }
 
@@ -63,12 +62,9 @@ namespace CoronaApp.Services
                 return null;
             }
             patient = _mapper.Map<Patient>(updatedPatient);
-            foreach (var path in patient.Paths)
-            {
-                path.PatientId = patient.PatientId;
-            }
 
             Patient updatedPatientFromDbs = await _patientRepository.Update(patient);
+            Log.Information("Patient with id {@id} updated {@newPatient}", updatedPatientFromDbs.PatientId, updatedPatientFromDbs);
             return _mapper.Map<PatientModel>(updatedPatientFromDbs);
 
         }

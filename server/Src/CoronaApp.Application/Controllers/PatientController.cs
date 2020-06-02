@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-
+using Serilog;
 
 namespace CoronaApp.Api.Controllers
 {
@@ -33,8 +33,7 @@ namespace CoronaApp.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<PatientModel>> GetById(int id)
         {
-            try
-            {        
+    
                 PatientModel patient = await _patientService.GetById(id);
                 //if (patient == null)
                 //{
@@ -45,11 +44,8 @@ namespace CoronaApp.Api.Controllers
                 //    return patient;
                 //}
                 return patient;
-            }
-            catch (Exception e)
-            {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure while retrieving patient" + e.StackTrace);
-            }
+            
+
 
         }
 
@@ -58,8 +54,8 @@ namespace CoronaApp.Api.Controllers
         [HttpGet] 
         public async Task<ActionResult<List<PatientModel>>> GetPatientsByAge(int age)
         {
-            try
-            {
+
+
                 List<PatientModel> patients = await _patientService.GetPatientsByAge(age);
                 //if (patient == null)
                 //{
@@ -70,11 +66,8 @@ namespace CoronaApp.Api.Controllers
                 //    return patient;
                 //}
                 return patients;
-            }
-            catch (Exception e)
-            {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure while retrieving patient" + e.StackTrace);
-            }
+
+
 
         }
 
@@ -82,11 +75,13 @@ namespace CoronaApp.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<PatientModel>> Save(PatientModel newPatient)
         {
-            try
-            {
+
                 PatientModel patient =  await _patientService.Save(newPatient);
                 if (patient == null)
                 {
+                    Log.Information("Patient with id {@id} requested to create but already exists", newPatient.PatientId);
+                //throw new Exception("Patient with id ${ newPatient.PatientId } requested to create but already exists");
+
                     return BadRequest($"patient with id:{newPatient.PatientId} already exists");
                 }
 
@@ -95,14 +90,12 @@ namespace CoronaApp.Api.Controllers
 
                 if (string.IsNullOrWhiteSpace(newPatientURI))
                 {
+                    Log.Information("requested new patient id {@id} is not a valid id", newPatient.PatientId);
+
                     throw new Exception("BadRequest Could not use current patientId");
                 }
                 return Created(newPatientURI, patient); ;
-            }
-            catch (Exception e)
-            {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure while creating new patient" + e.StackTrace);
-            }
+
 
         }
 
@@ -111,20 +104,17 @@ namespace CoronaApp.Api.Controllers
         [HttpPut]
         public async Task<ActionResult<PatientModel>> Update(PatientModel updatedPatient)
         {
-            try
-            {
+
                 PatientModel patient =  await _patientService.Update(updatedPatient);
                 if (patient == null)
                 {
+                    Log.Error("Patient with id {@id} requested to update was not found", updatedPatient.PatientId);
+
                     return BadRequest($"patient with id:{updatedPatient.PatientId} was not found");
                 }
 
                 return await _patientService.Update(updatedPatient);
-            }
-            catch (Exception e)
-            {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure while retrieving patient" + e.StackTrace);
-            }
+            
 
 
         }
@@ -133,16 +123,13 @@ namespace CoronaApp.Api.Controllers
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
-            try
-            {
+
                 // return _patientService.Delete(id);
                 return Ok();
-            }
-            catch (Exception e)
-            {
 
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure while deleting patient"+e.StackTrace);
-            }
+
+
+
 
         }
 

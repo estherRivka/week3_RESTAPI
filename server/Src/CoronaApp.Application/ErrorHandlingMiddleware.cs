@@ -9,6 +9,7 @@ using System.Web.Helpers;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
+using Serilog;
 
 public class ErrorHandlingMiddleware
 {
@@ -22,7 +23,8 @@ public class ErrorHandlingMiddleware
     {
         try
         {
-            Console.WriteLine("before error h");
+            
+
             await _next(context);
             Console.WriteLine("after error h");
 
@@ -39,10 +41,12 @@ public class ErrorHandlingMiddleware
 
 
         string result = JsonSerializer.Serialize(new { error = ex.Message, statusCode = code });
+        
+        Log.Error(result);
 
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)code;
-         await context.Response.WriteAsync(result);
+        await context.Response.WriteAsync(result);
     }
     
 }

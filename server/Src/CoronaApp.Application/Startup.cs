@@ -66,7 +66,9 @@ namespace CoronaApp.Api
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseStaticFiles();
+
+            app.UseErrorHandlingMiddleware();
+            app.UseStaticFiles(); 
 
             app.UseHttpsRedirection();
 

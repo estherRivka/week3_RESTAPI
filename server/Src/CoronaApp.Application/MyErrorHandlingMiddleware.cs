@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,11 +23,13 @@ namespace CoronaApp.Api
             try
             {
                 await next(context);
-                if (context.Response.StatusCode == 404)
-                    throw new Exception("your requested page wasnt found :-(");
+                //if (context.Response.StatusCode == 404)
+                //    throw new Exception("your requested page wasnt found :-(");
             }
             catch (Exception ex)
             {
+                Log.Error("error accured : {@exepstionMassage}", ex.Message);
+
                 await HandleExceptionAsync(context, ex);
             }
         }

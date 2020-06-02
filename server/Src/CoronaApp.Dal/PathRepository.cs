@@ -3,6 +3,7 @@ using CoronaApp.Entities;
 using CoronaApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -30,7 +31,7 @@ namespace CoronaApp.Dal
         {
 
             List<Path> paths = await _dbcontext.Paths.ToListAsync();
-          
+            Log.Information("access to database was succesfull ,got data:{@paths}", paths);
              return paths;
         }
 

@@ -19,7 +19,8 @@ namespace CoronaApp.Tests
         } 
         public   Task<List<Path>> GetAllPaths()
         {
-          return  Task.FromResult<List<Path>>(new List<Path>() {  }      );
+            return Task.FromResult<List<Path>>(new List<Path>() { new Path() { Id = 1, City = "Tel Aviv", Location = "Library", StartDate = new DateTime(2000, 12, 01), EndDate = new DateTime(2000, 12, 30) } }
+                  ); ;
 
         //  return  _dbContext.Paths.ToList();
                  

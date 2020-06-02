@@ -23,9 +23,9 @@ public class ErrorHandlingMiddleware
     {
         try
         {
-            
-
+      
             await _next(context);
+            
             Console.WriteLine("after error h");
 
         }
@@ -40,11 +40,11 @@ public class ErrorHandlingMiddleware
         var code = HttpStatusCode.InternalServerError; 
 
 
-        string result = JsonSerializer.Serialize(new { error = ex.Message, statusCode = code });
+     string result = JsonSerializer.Serialize(new { errorMessage = ex.Message ,statusCode= code });
         
         Log.Error(result);
 
-        context.Response.ContentType = "application/json";
+       // context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)code;
         await context.Response.WriteAsync(result);
     }

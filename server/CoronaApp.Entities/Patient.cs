@@ -8,9 +8,10 @@ namespace CoronaApp.Entities
     public class Patient
     {
         //  [DatabaseGenerated(DatabaseGeneratedOption.None)]
+
         public int PatientId { get; set; }
         public List<Path> Paths { get; set; }
-        [Required]
+        [Range(1,120)]
         public int Age { get; set; }
     }
 }

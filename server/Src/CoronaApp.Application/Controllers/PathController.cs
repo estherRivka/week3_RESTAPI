@@ -36,8 +36,8 @@ namespace CoronaApp.Api.Controllers
         {
               List<PathModel> paths =await _pathService.GetAllPaths();
                
-                if (paths == null)
-                    return NotFound("Couldn't find any paths");
+                //if (paths == null)
+                //    return NotFound("Couldn't find any paths");
             Log.Information("successfull to add all paths {@paths}", paths);
            
                 return paths;
@@ -50,11 +50,11 @@ namespace CoronaApp.Api.Controllers
         {
                 List<PathModel> paths = await _pathService.GetPathsBySearch(pathSearch);
 
-            if (paths == null)
-            {
-                Log.Warning("Couldn't find any paths in city {@pathSearchByCity}", pathSearch.City);
-                return NotFound($"Couldn't find any paths in city {pathSearch.City}");
-            }
+            //if (paths == null)
+            //{
+            //    Log.Warning("Couldn't find any paths in city {@pathSearchByCity}", pathSearch.City);
+            //    return NotFound($"Couldn't find any paths in city {pathSearch.City}");
+            //}
             Log.Information("succesfull to get paths in city {@pathSearchByCity}", paths);
 
             return paths;

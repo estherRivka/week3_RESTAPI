@@ -8,7 +8,7 @@ namespace CoronaApp.Entities
     {
         City,
         Age,
-        DateEnd,
-        DateStart
+        EndDate,
+        StartDate
     }
 }

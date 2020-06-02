@@ -34,37 +34,37 @@ namespace CoronaApp.Api.Controllers
         public async Task<ActionResult<List<PathModel>>> GetAllPaths()
         {
 
-            try
-            {
-                List<PathModel> paths =await _pathService.GetAllPaths();
+            //try
+            //{
+              List<PathModel> paths =await _pathService.GetAllPaths();
                
                 if (paths == null)
                     return NotFound("Couldn't find any paths");
                 return paths;
-            }
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to get Paths");
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    return StatusCode(StatusCodes.Status500InternalServerError, "Failed to get Paths");
+            //}
         }
         [EnableCors]
         [HttpGet]
 
         public async Task<ActionResult<List<PathModel>>> GetPathSearchBy([FromQuery]PathSearch pathSearch)
         {
-             
-            try
-            {
-                List<PathModel> paths=await  _pathService.GetPathsBySearch(pathSearch);
-                
+
+            //try
+            //{
+                List<PathModel> paths = await _pathService.GetPathsBySearch(pathSearch);
+
                 if (paths == null)
                     return NotFound($"Couldn't find any paths in city {pathSearch.City}");
                 return paths;
-            }
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to get Paths");
-            }
+            //}
+            //catch (Exception e)
+            //{
+               // return StatusCode(StatusCodes.Status500InternalServerError, "Failed to get Paths");
+            //}
         }
 
 

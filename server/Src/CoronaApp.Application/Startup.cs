@@ -7,6 +7,7 @@ using CoronaApp.Dal;
 using CoronaApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +38,7 @@ namespace CoronaApp.Api
             services.AddScoped(typeof(IPatientService), typeof(PatientService));
 
             services.AddDbContext<CoronaContext>(options => options.UseSqlServer
-            (Configuration.GetConnectionString("CoronaDBConnectionString")));
+            (Configuration.GetConnectionString("CoronaDBConnectionStringTzippy")));
 
             //services.AddDbContext<CoronaContext>(options => options.UseSqlServer
             //(Configuration.GetConnectionString("CoronaDBConnectionString")));
@@ -66,11 +67,14 @@ namespace CoronaApp.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.ConfigureMyErrorHandlingMiddleware();
             app.UseStaticFiles();
 
             app.UseHttpsRedirection();
-
+            //app.UseMiddleware<MyErrorHandlingMiddleware>();
+           // app.Use(ErrorHandlingMiddleware);
             app.UseRouting();
+
             app.UseCors("Policy1");
             app.UseAuthorization();
 
@@ -79,5 +83,7 @@ namespace CoronaApp.Api
                 endpoints.MapControllers();
             });
         }
+
+       
     }
 }

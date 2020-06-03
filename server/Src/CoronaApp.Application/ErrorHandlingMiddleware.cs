@@ -10,6 +10,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Serilog;
+using System.IO;
+using CoronaApp.Api.Exceptions;
 
 public class ErrorHandlingMiddleware
 {
@@ -23,11 +25,15 @@ public class ErrorHandlingMiddleware
     {
         try
         {
-            
 
-            await _next(context);
-            Console.WriteLine("after error h");
+                await _next(context);
+                //if (context.Response.StatusCode == 400)
+                //{
 
+                //    context.Response.WriteAsync("bad request");
+
+                //}
+          
         }
         catch (Exception ex)
         {
@@ -37,16 +43,22 @@ public class ErrorHandlingMiddleware
 
     private async static Task HandleExceptionAsync(HttpContext context, Exception ex)
     {
-        var code = HttpStatusCode.InternalServerError; 
+        var code = HttpStatusCode.InternalServerError;
+        if (ex is PatientNotExistExcption)
+        {
+            code = HttpStatusCode.NoContent;
+        }
 
 
-        string result = JsonSerializer.Serialize(new { error = ex.Message, statusCode = code });
-        
-        Log.Error(result);
+
+        string result = JsonSerializer.Serialize(new { errorMessage = ex.Message, statusCode = code });
+      
+        Log.Error(ex, "errot caught in ErrorHandlingMiddleware");
 
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)code;
         await context.Response.WriteAsync(result);
+        
     }
     
 }

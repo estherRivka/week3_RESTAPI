@@ -18,9 +18,8 @@ function getPatientById(currentPatientId, url) {
             if (this.readyState == 4 && this.status == 200) {
                 resolve(JSON.parse(this.responseText));
             }
-            if (this.readyState == 4 && this.status !== 200) {
-                debugger;
-                reject(this.status);
+            if (this.readyState == 4 && this.status !== 200) {                     
+                reject({ statusCode:this.status, response: JSON.parse(this.responseText)});
             }
         };
         xhttp.open("GET", `${url}/GetById/${currentPatientId}`);
@@ -40,7 +39,9 @@ function updatePatient(updatedPatient, url) {
                 resolve(JSON.parse(this.responseText));
             }
             if (this.readyState == 4 && this.status !== 200) {
-                reject("an error accured updating");
+                const errorMessage = JSON.parse(this.responseText).errorMessage;
+                alert(errorMessage);
+                reject(errorMessage);
             }
         };
         xhttp.open("PUT", url);
@@ -62,8 +63,10 @@ function createNewPatient(patientId, url) {
             if (this.readyState == 4 && this.status == 201) {
                 resolve(JSON.parse(this.responseText));
             }
-            if (this.readyState == 4 && this.status !== 200) {
-                reject(`an error accured creating patient with id ${patientId}`);
+            if (this.readyState == 4 && this.status !== 201) {
+                const errorMessage = JSON.parse(this.responseText).errorMessage;
+                alert(errorMessage);
+                reject(errorMessage);
             }
         };
         xhttp.open("POST", url);
@@ -107,9 +110,11 @@ function configurePage(columnNames, columnKeys, patientURL) {
                     SetViewLocationBtnAvailability(false);
                
             })
-            .catch((statusCode)=>{
+            .catch(({statusCode, response})=>{
+                debugger;
                 //returned with no value, patient doesnt exist
                 if (statusCode === 204){
+                    debugger;
                     createNewPatient(patientId, patientURL)
                     .then((currentPatientFromDbs)=>{
                         currentPatient=currentPatientFromDbs;
@@ -119,7 +124,7 @@ function configurePage(columnNames, columnKeys, patientURL) {
                     .catch(console.log);
                 }
                 else{
-                    console.log("error occured retieving patient");
+                    alert(`error occured retieving patient: ${response.errorMessage}`);
                 }
                 
             });

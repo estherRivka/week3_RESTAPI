@@ -80,6 +80,7 @@ namespace CoronaApp.Api.Controllers
 
         // POST: api/Path
         [HttpPost]
+        
         public async Task<ActionResult<PatientModel>> Save(PatientModel newPatient)
         {
 

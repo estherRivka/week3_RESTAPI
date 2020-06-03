@@ -1,4 +1,5 @@
 ﻿using CoronaApp.Dal;
+using CoronaApp.Entities;
 using CoronaApp.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -49,19 +50,27 @@ namespace CoronaApp.Tests
        .CreateClient();
 
             //Act
+            List<Path> list = new List<Path>() {
+             new Path() { Id = 1, City = "Tel Aviv", Location = "Library", StartDate = new DateTime(2000, 12, 01), EndDate = new DateTime(2000, 12, 30)
+              } };
             var response = await client.GetAsync("/api/path/getallpaths");
             //var content = await HtmlHelpers.GetDocumentAsync(defaultPage);
             // var quoteElement = content.QuerySelector("#quote");
             //response.EnsureSuccessStatusCode();
-            // Assert
+         		//JSON.parse(	error CS1026: ) expected
+   // Assert
             //  Assert.Equal("Something's interfering with time, Mr. Scarman, " +
             //   "and time is my business.", quoteEle>ment.Attributes["value"].Value);
             //  HttpStatusCode d = new HttpStatusCode();
             // Assert.IsType <d>(response.StatusCode);
             // Assert.IsType<StatusCodes.Status200OK>(response);
-            response.EnsureSuccessStatusCode();
-
-          //  Assert.True((int)response.StatusCode==200, $"The returnd status is:{(int)response.StatusCode}");
+           
+            //response.EnsureSuccessStatusCode();
+            //var objectResult = Assert.IsType<OkObjectResult>(response);
+            //var model = Assert.IsAssignableFrom<List<string>>(objectResult.Value);
+            //Assert.Equal(2, model.Count);
+            //Assert.Equals(response);
+            //  Assert.True((int)response.StatusCode==200, $"The returnd status is:{(int)response.StatusCode}");
         }
     }
 }

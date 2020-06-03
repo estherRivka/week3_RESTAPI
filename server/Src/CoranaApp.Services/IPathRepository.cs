@@ -9,13 +9,13 @@ namespace CoronaApp.Services
     public interface IPathRepository
     {
         Task<List<Path>> GetAllPaths();
-        Task<List<Path>> GetPathsByCity(PathSearch locationSearch);
+        //Task<List<Path>> GetPathsByCity(PathSearch locationSearch);
         Task<List<Path>> GetPathsByDate(PathSearch locationSearch);
 
-        Task<List<Path>> GetPathsByStartDate(PathSearch locationSearch);
+        //Task<List<Path>> GetPathsByStartDate(PathSearch locationSearch);
 
-        Task<List<Path>> GetPathsByEndDate(PathSearch locationSearch);
-        Task<List<Path>> GetPathsByAge(PathSearch locationSearch);
+        //Task<List<Path>> GetPathsByEndDate(PathSearch locationSearch);
+        //Task<List<Path>> GetPathsByAge(PathSearch locationSearch);
 
 
         Task<List<Path>> GetPathsByProperty(PathSearch locationSearch);

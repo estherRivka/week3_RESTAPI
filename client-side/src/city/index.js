@@ -58,6 +58,7 @@ function getLocationsFromServerByDate(URLPath,startDate,EndDate) {
 }
 
 function getCulumnNamesData(locationsDataset) {
+    if(locationsDataset.length>0)
     return Object.keys(locationsDataset[0]);
 }
 

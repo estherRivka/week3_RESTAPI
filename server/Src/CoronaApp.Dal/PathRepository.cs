@@ -33,7 +33,7 @@ namespace CoronaApp.Dal
             List<Path> paths = await _dbcontext.Paths.ToListAsync();
             if (paths == null ) 
             {
-                Log.Warning("Couldn't find any paths");
+              //  Log.Warning("Couldn't find any paths");
                 throw new Exception("NotFound:Couldn't find any paths");
 
             }
@@ -56,7 +56,7 @@ namespace CoronaApp.Dal
             List<Path> pathsInPropery = await _dbcontext.Paths.ToListAsync();
             if (pathsInPropery == null )
             {
-                Log.Warning("Couldn't find any paths");
+              //  Log.Warning("Couldn't find any paths");
                 throw new Exception("NotFound:Couldn't find any paths");
 
             }
@@ -79,7 +79,7 @@ namespace CoronaApp.Dal
             //      .ToListAsync();
             if (newPathsInPropery == null)
             {
-                Log.Warning("Couldn't find any paths in property {@pathSearchByCity}", locationSearch.searchByProperty);
+              //  Log.Warning("Couldn't find any paths in property {@pathSearchByCity}", locationSearch.searchByProperty);
                 throw new Exception($"NotFound:Couldn't find any paths for property {locationSearch.searchByProperty}");
 
             }
@@ -143,7 +143,7 @@ namespace CoronaApp.Dal
             //    return null;
             if (paths == null )
             {
-                Log.Warning("Couldn't find any paths for date from: {@StartDate} till {@EndDate}", locationSearch.StartDate , locationSearch.EndDate);
+               // Log.Warning("Couldn't find any paths for date from: {@StartDate} till {@EndDate}", locationSearch.StartDate , locationSearch.EndDate);
                 throw new Exception($"NotFound:Couldn't find any paths for date from: {locationSearch.StartDate} till {locationSearch.EndDate}");
 
             }
@@ -155,10 +155,10 @@ namespace CoronaApp.Dal
 
             //if (PathsInDate == null || !PathsInDate.Any())
             //    return null;
-            if (paths == null  )
+            if (PathsInDate == null  )
             {
-                Log.Warning("Couldn't find any paths between date {@pathSearchByCity}", locationSearch.StartDate);
-                throw new Exception($"NotFound:Couldn't find any paths {locationSearch.City}");
+                Log.Warning("Couldn't find any paths between date {@pathSearchByStartDate} and {@pathSearchByEndDate}", locationSearch.StartDate, locationSearch.EndDate);
+                throw new Exception($"NotFound:Couldn't find any paths for dates between:{locationSearch.StartDate} till:{locationSearch.EndDate}");
 
             }
 

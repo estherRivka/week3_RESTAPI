@@ -9,6 +9,7 @@ namespace CoronaApp.Entities
         City,
         Age,
         EndDate,
-        StartDate
+        StartDate,
+        Date
     }
 }

@@ -26,14 +26,14 @@ public class ErrorHandlingMiddleware
         try
         {
 
-                await _next(context);
-                //if (context.Response.StatusCode == 400)
-                //{
+            await _next(context);
+           //if (context.Response.StatusCode == 400)
+           //{
+           //     context.Response.Clear();
+           //     context.Response.WriteAsync("bad request");
 
-                //    context.Response.WriteAsync("bad request");
+           //}
 
-                //}
-          
         }
         catch (Exception ex)
         {
@@ -54,6 +54,7 @@ public class ErrorHandlingMiddleware
         string result = JsonSerializer.Serialize(new { errorMessage = ex.Message, statusCode = code });
       
         Log.Error(ex, "errot caught in ErrorHandlingMiddleware");
+    
 
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)code;

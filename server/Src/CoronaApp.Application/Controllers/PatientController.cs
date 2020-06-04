@@ -37,9 +37,6 @@ namespace CoronaApp.Api.Controllers
 
         public async Task<ActionResult<PatientModel>> GetById(int id)
         {
-
-            throw new Exception("Not Found: patients with requested age were not found");
-
             PatientModel patient = await _patientService.GetById(id);
             if (patient == null)
             {

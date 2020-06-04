@@ -26,14 +26,14 @@ public class ErrorHandlingMiddleware
         try
         {
 
-                await _next(context);
-                //if (context.Response.StatusCode == 400)
-                //{
+            await _next(context);
+            //if (context.Response.StatusCode == 400)
+            //{
 
-                //    context.Response.WriteAsync("bad request");
+            //    context.Response.WriteAsync("bad request");
 
-                //}
-          
+            //}
+
         }
         catch (Exception ex)
         {

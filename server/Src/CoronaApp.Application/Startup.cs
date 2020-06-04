@@ -37,7 +37,7 @@ namespace CoronaApp.Api
             services.AddScoped(typeof(IPatientService), typeof(PatientService));
 
             services.AddDbContext<CoronaContext>(options => options.UseSqlServer
-            (Configuration.GetConnectionString("CoronaDBConnectionStringTzippy")));
+            (Configuration.GetConnectionString("CoronaDBConnectionString")));
 
             //services.AddDbContext<CoronaContext>(options => options.UseSqlServer
             //(Configuration.GetConnectionString("CoronaDBConnectionString")));

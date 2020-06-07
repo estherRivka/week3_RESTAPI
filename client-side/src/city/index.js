@@ -1,6 +1,6 @@
 ﻿
 'use strict';
-const URLPath="http://localhost:6060/api/path";
+const URLPath ="http://localhost/coronainformation/api/path";
 const script = document.createElement('script');
 script.src = '//code.jquery.com/jquery-1.11.0.min.js';
 document.getElementsByTagName('head')[0].appendChild(script);

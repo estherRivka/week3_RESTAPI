@@ -7,6 +7,7 @@ using AutoMapper;
 using CoronaApp.Api.Exceptions;
 using CoronaApp.Services;
 using CoronaApp.Services.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,7 @@ using Serilog;
 
 namespace CoronaApp.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
 
@@ -28,6 +30,18 @@ namespace CoronaApp.Api.Controllers
             _linkGenerator = linkGenerator;
             _patientService = patientService;
 
+        }
+
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public async Task<ActionResult<PatientModel>> Authenticate([FromBody]AuthenticateModel model)
+        {
+            var token = await _patientService.AuthenticateAsync(model.Username, model.Password);
+
+            if (token == null)
+                return BadRequest(new { message = "Username or password is incorrect" });
+
+            return Ok(token);
         }
 
         // GET api/Patient/7

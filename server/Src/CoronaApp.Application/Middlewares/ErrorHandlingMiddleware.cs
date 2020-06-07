@@ -53,7 +53,7 @@ public class ErrorHandlingMiddleware
 
         string result = JsonSerializer.Serialize(new { errorMessage = ex.Message, statusCode = code });
       
-        Log.Error(ex, "errot caught in ErrorHandlingMiddleware");
+         Log.Error(ex, "errot caught in ErrorHandlingMiddleware");
     
 
         context.Response.ContentType = "application/json";

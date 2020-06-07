@@ -70,7 +70,8 @@ namespace CoronaApp.Tests
             //var model = Assert.IsAssignableFrom<List<string>>(objectResult.Value);
             //Assert.Equal(2, model.Count);
             //Assert.Equals(response);
-            //  Assert.True((int)response.StatusCode==200, $"The returnd status is:{(int)response.StatusCode}");
+              Assert.True((int)response.StatusCode==200, $"The returnd status is:{(int)response.StatusCode}");
+            //Assert.Equal(list, response.Content.ReadAsStringAsync().Result.Split().ToList());
         }
     }
 }

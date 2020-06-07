@@ -21,8 +21,15 @@ namespace CoronaApp.Dal
             _dbContext = dbContext;
             _mapper = mapper;
         }
-
-       public async Task<Patient> GetById(int id)
+       public async Task<Patient> GetByUserNameAndPassword(string username, string password)
+        {
+            return await _dbContext.Patients
+                .Where(patient =>
+                    patient.UserName == username && patient.Password == password)
+                .FirstOrDefaultAsync();
+            
+        }
+        public async Task<Patient> GetById(int id)
         {
 
             return await _dbContext.Patients      

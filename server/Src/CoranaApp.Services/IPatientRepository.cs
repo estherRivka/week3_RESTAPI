@@ -14,6 +14,7 @@ namespace CoronaApp.Services
         Task<Patient> Save(Patient newPatient);
          Task<List<Patient>> GetPatientsByAge(int age);
         Task<Patient> getByUserNameAndPassword(string username, string password);
+        Task<string> GetUserName(int id);
 
         //void Delete(int id);
     }

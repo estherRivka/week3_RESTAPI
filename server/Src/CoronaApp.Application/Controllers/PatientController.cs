@@ -34,14 +34,27 @@ namespace CoronaApp.Api.Controllers
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public async Task<ActionResult<PatientModel>> Authenticate([FromBody]AuthenticateModel model)
+        public async Task<ActionResult> Authenticate([FromBody]AuthenticateModel model)
         {
-            var token = await _patientService.AuthenticateAsync(model.Username, model.Password);
+            string token = await _patientService.AuthenticateAsync(model.Username, model.Password);
+
+
 
             if (token == null)
+            {
                 return BadRequest(new { message = "Username or password is incorrect" });
+            }
+            else
+            {
+                HttpContext.Response.Cookies.Append(".AspNetCore.Application.Id", token,
+                                new CookieOptions
+                                          {
+                                              MaxAge = TimeSpan.FromMinutes(60)
+                                          });
+                return Ok();
+            }
 
-            return Ok(token);
+
         }
 
         // GET api/Patient/7
@@ -60,6 +73,28 @@ namespace CoronaApp.Api.Controllers
             {
 
                 return patient;
+            }
+            // return patient;
+
+
+
+        }
+
+        [Route("[action]/{id:int}")]
+        [EnableCors]
+        [HttpGet]
+
+        public async Task<ActionResult<string>> GetUserName(int id)
+        {
+            string patientName = await _patientService.GetUserName(id);
+            if (patientName == null)
+            {
+                throw new PatientNotExistExcption(id);
+            }
+            else
+            {
+
+                return patientName;
             }
             // return patient;
 
@@ -90,9 +125,11 @@ namespace CoronaApp.Api.Controllers
         }
 
         // POST: api/Path
+        [AllowAnonymous]
         [HttpPost]
-        
+
         public async Task<ActionResult<PatientModel>> Save(PatientModel newPatient)
+        
         {
 
             PatientModel patient = await _patientService.Save(newPatient);

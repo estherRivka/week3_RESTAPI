@@ -28,7 +28,7 @@ function getAllLocationsFromServer(URLPath) {
 function getLocationsFromServerByCity(URLPath,city) {
     return new Promise((resolve, reject) => {
         $.ajax({
-            url: `${URLPath}/GetPathSearchBy?pathSearch.City=${city}`, success: function (result) {
+            url: `${URLPath}/GetPathSearchBy?pathSearch.City=${city}&pathSearch.searchByProperty=City`, success: function (result) {
                 resolve(result);
             },
             error: function (result) {
@@ -44,8 +44,8 @@ function getLocationsFromServerByCity(URLPath,city) {
 function getLocationsFromServerByDate(URLPath,startDate,EndDate) {
     return new Promise((resolve, reject) => {
         $.ajax({
-            // `${URLPath}/GetAllPaths`
-            url: `${URLPath}/GetPathSearchBy?pathSearch.DateStart=${startDate}&pathSearch.DateEnd=${EndDate}`, success: function (result) {
+            // http://localhost:6060/api/path/GetPathSearchBy?pathSearch.StartDate=01/06/2015&pathSearch.EndDate=01/06/2023&pathSearch.searchByProperty=Date
+            url: `${URLPath}/GetPathSearchBy?pathSearch.StartDate=${startDate}&pathSearch.EndDate=${EndDate}&pathSearch.searchByProperty=Date`, success: function (result) {
                 resolve(result);
             },
             error: function (result) {
@@ -101,10 +101,12 @@ function loadHtmlPage() {
                 if (isNotNull(document.getElementById("dateSearchfrom")) === true && isNotNull(document.getElementById("dateSearchtill")) === true) {
                     const fromDate = document.getElementById("dateSearchfrom").value;
                     const tillDate = document.getElementById("dateSearchtill").value;
-                   // if(fromDate=='' || tillDate=='')
-                   // alert('you must put values in dates inputs!');
+                    if(fromDate=='' || tillDate=='')
+                   alert('you must put values in dates inputs!');
                    // getAllLocationsFromServerByDate(URLPath,fromDate,tillDate);
-                    showResultsFilterdByDate(URLPath,fromDate,tillDate);
+                   else{
+                       showResultsFilterdByDate(URLPath,fromDate,tillDate);
+                   } 
                 }
         });
 
@@ -337,7 +339,7 @@ function showResultsFilterdByDate(url,fromDate,tillDate) {
         if (isNotNull(document.getElementById("getAllLocations")) === true)
             statusOfElement(document.getElementById("getAllLocations"), false);
     }).catch(result => {
-        alert(result.responseText);
+        alert((JSON.parse(result.responseText)));
     });
 
 

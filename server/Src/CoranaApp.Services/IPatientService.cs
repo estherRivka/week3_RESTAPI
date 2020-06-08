@@ -14,6 +14,7 @@ namespace CoronaApp.Services
         Task<PatientModel> Update(PatientModel updatedPatient);
         Task<List<PatientModel>> GetPatientsByAge(int age);
         Task<string> AuthenticateAsync(string username, string password);
+        Task<string> GetUserName(int id);
         //Delete(int id);
     }
 }

@@ -85,6 +85,7 @@ namespace CoronaApp.Services
             if (patient == null)
                 return null;
 
+
             // authentication successful so generate jwt token
             var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -93,9 +94,9 @@ namespace CoronaApp.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, patient.PatientId.ToString())
+                    new Claim(ClaimTypes.Name, patient.UserName.ToString())
                 }),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddMinutes(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -103,6 +104,13 @@ namespace CoronaApp.Services
 
             return stringToken;
        
+        }
+
+        public async Task<string> GetUserName(int id)
+        {
+            string patientName = await _patientRepository.GetUserName(id);
+            return patientName;
+
         }
 
         //ActionResult delete(int id)

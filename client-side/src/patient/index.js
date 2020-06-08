@@ -1,5 +1,5 @@
 "use strict";
-const patientControllerURL = "http://localhost/coronainformation/api/patient";
+const patientControllerURL = "https://localhost:44377/api/patient";
 
 const columnNames = ["Start Date", "End Date", "City", "Location"];
 const columnKeys = ["startDate", "endDate", "city", "location"];
@@ -12,6 +12,7 @@ window.onload = function () {
 function getPatientById(currentPatientId, url) {
 
     var xhttp = new XMLHttpRequest();
+    xhttp.withCredentials = true;
 
     return new Promise((resolve, reject) => {
 
@@ -32,6 +33,7 @@ function getPatientById(currentPatientId, url) {
 function updatePatient(updatedPatient, url) {
 
     var xhttp = new XMLHttpRequest();
+    xhttp.withCredentials = true;
 
     return new Promise((resolve, reject) => {
 
@@ -57,6 +59,7 @@ function updatePatient(updatedPatient, url) {
 function createNewPatient(patientId, url) {
 
     var xhttp = new XMLHttpRequest();
+    xhttp.withCredentials = true;
 
     return new Promise((resolve, reject) => {
 

@@ -35,8 +35,8 @@ namespace CoronaApp.Services
         {
           
             List<Path> listOfLocations;
-           
-            if (locationSearch.StartDate != DateTime.MinValue && locationSearch.EndDate!= DateTime.MinValue)
+           if(locationSearch.searchByProperty==SearchBy.Date)
+            
             {
                 listOfLocations = await _pathRepository.GetPathsByDate(locationSearch);
             }
@@ -45,11 +45,7 @@ namespace CoronaApp.Services
                 listOfLocations = await _pathRepository.GetPathsByProperty(locationSearch);
             }
 
-            //if (listOfLocations == null || !listOfLocations.Any())
-            //{
-            //    return null;
-            //}
-
+          
             return _mapper.Map<List<PathModel>>(listOfLocations);
         }
     }

@@ -50,12 +50,13 @@ namespace CoronaApp.Api.Controllers
         {
                 List<PathModel> paths = await _pathService.GetPathsBySearch(pathSearch);
 
-            //if (paths == null)
-            //{
+            if (paths == null)
+            {
             //    Log.Warning("Couldn't find any paths in city {@pathSearchByCity}", pathSearch.City);
-            //    return NotFound($"Couldn't find any paths in city {pathSearch.City}");
-            //}
+               throw new Exception($"Couldn't find any paths for search {pathSearch.searchByProperty}");
+            }
             Log.Information("succesfull to get paths in city {@pathSearchByCity}", paths);
+         
 
             return paths;
           

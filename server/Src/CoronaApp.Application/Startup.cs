@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 using AutoMapper;
 using CoronaApp.Dal;
 using CoronaApp.Services;
+using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +20,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+
 
 namespace CoronaApp.Api
 {
@@ -32,7 +36,10 @@ namespace CoronaApp.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-           
+       //     services.AddAuthentication(
+       //CertificateAuthenticationDefaults.AuthenticationScheme)
+       //.AddCertificate();
+
             var key = Encoding.ASCII.GetBytes(Configuration.GetValue<string>("AppSettings:Secret"));
             services.AddAuthentication(x =>
             {
@@ -48,7 +55,8 @@ namespace CoronaApp.Api
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
-                    ValidateAudience = false
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero
                 };
             });
 
@@ -75,7 +83,8 @@ namespace CoronaApp.Api
                         builder.WithOrigins("http://localhost:8080");
 
                         builder.AllowAnyHeader();
-                        builder.WithMethods("GET", "POST", "PUT");
+                        builder.WithMethods("GET", "POST", "PUT")
+                        .AllowCredentials();
 
                     });
 
@@ -92,12 +101,32 @@ namespace CoronaApp.Api
             app.UseErrorHandlingMiddleware();
             app.UseStatusCodePages();
 
-            app.UseStaticFiles(); 
+            app.UseStaticFiles();
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
             app.UseCors("Policy1");
+            app.UseCookiePolicy(new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.None,
+                HttpOnly = HttpOnlyPolicy.Always,
+               // Secure = CookieSecurePolicy.Always
+            });
+
+            app.Use(async (context, next) =>
+            {
+                var token = context.Request.Cookies[".AspNetCore.Application.Id"];
+                if (!string.IsNullOrEmpty(token))
+                {
+                    context.Request.Headers.Add("Authorization", "Bearer " + token);
+                }
+                //context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+                //context.Response.Headers.Add("X-Xss-Protection", "1");
+                //context.Response.Headers.Add("X-Frame-Options", "DENY");
+
+                await next();
+            });
             app.UseAuthentication();
             app.UseAuthorization();
 

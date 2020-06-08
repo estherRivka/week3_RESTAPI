@@ -11,8 +11,8 @@ const loginBtn = document.getElementById("loginBtn");
 if (loginBtn !== null) {
     loginBtn.addEventListener("click", async function () {
 
-        const userNameInp= document.getElementsByName("username")[0];
-        const passwordInp= document.getElementsByName("pass")[0];
+        // const userNameInp= document.getElementById("username")[0];
+        // const passwordInp= document.getElementById("pass")[0];
         let check = true;
             // if(validate(userNameInp) == false){
             //          showValidate(userNameInp);
@@ -24,12 +24,10 @@ if (loginBtn !== null) {
             // }
 
         if (check === true){
-         //   window.location.href = "src/menu/index.html";
                authenticateUser()
-               .then((response)=>{
-                   alert(response);
-                   token = response;
-                   //document.cookie='access_token=[response]';
+               .then(()=>{
+      
+                
               window.location.href = "src/menu/index.html";
 
                    
@@ -127,11 +125,6 @@ if (registerBtn !== null) {
 
 function authenticateUser(){
 
-
-    // var validateModel = {
-    //     userName: document.getElementsByName("username")[0].value,
-    //     password: document.getElementsByName("pass")[0].value
-    // };
     
         var validateModel = {
         userName: document.getElementById("username").value,
@@ -145,7 +138,7 @@ function authenticateUser(){
     
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
-                    resolve(JSON.parse(this.responseText));
+                    resolve();
                 }
                 if (this.readyState == 4 && this.status !== 200) {
                     const errorMessage = JSON.parse(this.responseText).errorMessage;
@@ -186,8 +179,7 @@ $('.message a').click(function(){
         xhttp.open("POST", "https://localhost:44377/api/patient");
         xhttp.setRequestHeader('Content-Type', 'application/json');
         xhttp.setRequestHeader('Accept', 'application/json');
-        var x = JSON.stringify(newPatient);
-        xhttp.send(x);
+        xhttp.send(JSON.stringify(newPatient));
     });
 
 }

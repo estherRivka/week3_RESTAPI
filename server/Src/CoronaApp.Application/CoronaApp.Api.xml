@@ -4,12 +4,18 @@
         <name>CoronaApp.Api</name>
     </assembly>
     <members>
-        <member name="M:CoronaApp.Api.Controllers.PatientController.GetPatientsByAge(System.Int32)">
+        <member name="T:CoronaApp.Api.Controllers.ConventionsTestsController">
             <summary>
-            returns all patients that their age matches the given age
+            this is a version api
             </summary>
-            <param name="age">the age of the patients you want to get</param>
-            <returns>list of patients with matching age</returns>
+        </member>
+        <member name="M:CoronaApp.Api.Controllers.PathController.GetAllPaths">
+            <summary>
+            get all paths of all patients
+            </summary>
+            <returns>list of paths</returns>
+            <response code = "200">returns all paths</response>
+             <response code = "513">returns all paths</response>
         </member>
     </members>
 </doc>

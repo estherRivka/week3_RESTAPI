@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+//using System.Web.Mvc;
 using AutoMapper;
 using CoronaApp.Entities;
 using CoronaApp.Services;
 using CoronaApp.Services.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,8 +18,10 @@ using Serilog;
 
 namespace CoronaApp.Api.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Authorize]
     [ApiController]
+    [Route("api/v{version:apiVersion}/[controller]/[action]")]
+    [Produces("Application/json")]
     public class PathController : ControllerBase
     {
 
@@ -29,6 +33,12 @@ namespace CoronaApp.Api.Controllers
             _pathService = pathService;
 
         }
+        /// <summary>
+        /// get all paths of all patients
+        /// </summary>
+        /// <returns>list of paths</returns>
+        /// <response code = "200">returns all paths</response>
+        ///  <response code = "513">returns all paths</response>
 
         [EnableCors]
         [HttpGet]
@@ -64,6 +74,14 @@ namespace CoronaApp.Api.Controllers
 
 
 
+        [EnableCors]
+        [HttpGet]
+        [ApiConventionMethod(typeof(CostumConventions)
+            ,nameof(CostumConventions.insert))]
+        public void insert()
+        {
+           
+        }
 
 
 

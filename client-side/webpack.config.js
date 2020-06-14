@@ -5,7 +5,8 @@ module.exports = {
     entry: {
         index:'./src/city/index.js',
         patient:'./src/patient/index.js',
-        home:'./src/home/index.js'},
+        menu:'./src/menu/index.js',
+        home:'./src/home/js/main.js'},
     output: {
         filename: '[name].js',
         // filename: 'bundle.js',

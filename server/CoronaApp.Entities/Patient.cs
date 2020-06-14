@@ -17,6 +17,5 @@ namespace CoronaApp.Entities
 
         [JsonIgnore]
         public string Password { get; set; }
-        public string Token { get; set; }
     }
 }

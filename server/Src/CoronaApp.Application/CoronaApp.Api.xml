@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CoronaApp.Api</name>
+    </assembly>
+    <members>
+        <member name="T:CoronaApp.Api.Controllers.ConventionsTestsController">
+            <summary>
+            this is a version api
+            </summary>
+        </member>
+        <member name="M:CoronaApp.Api.Controllers.PathController.GetAllPaths">
+            <summary>
+            get all paths of all patients
+            </summary>
+            <returns>list of paths</returns>
+            <response code = "200">returns all paths</response>
+             <response code = "513">returns all paths</response>
+        </member>
+    </members>
+</doc>

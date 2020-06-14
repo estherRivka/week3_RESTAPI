@@ -1,5 +1,4 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using CoronaApp.Entities;
 using CoronaApp.Services.Models;
 using Microsoft.AspNetCore.Routing;
@@ -28,12 +27,16 @@ namespace CoronaApp.Services
             _mapper = mapper;
         }
 
-        public async Task<PatientModel> Authenticate(string username, string password)
+        public async Task<string> Authenticate(string username, string password)
         {
-            Patient user = await _patientRepository.GetByUserNameAndPassword(username,password);
 
+            
+                
+
+            Patient user = await _patientRepository.GetByUserNameAndPassword(username,password);
+            PatientModel patient = _mapper.Map<PatientModel>(user);
             // return null if user not found
-            if (user == null)
+            if (patient == null)
                 return null;
 
             // authentication successful so generate jwt token
@@ -45,14 +48,17 @@ namespace CoronaApp.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.UserName.ToString())
+                    new Claim(ClaimTypes.Name, patient.UserName.ToString()),
+                    //new Claim(ClaimTypes.)
+                    new Claim("Id", patient.PatientId.ToString())
                 }),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddMinutes(10),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            user.Token = tokenHandler.WriteToken(token);
-            return _mapper.Map<PatientModel>(user);
+            var readyToken = tokenHandler.WriteToken(token);
+            
+            return readyToken;
           //  return user;
         }
 

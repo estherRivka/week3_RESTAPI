@@ -23,10 +23,11 @@ namespace CoronaApp.Dal
         }
        public async Task<Patient> GetByUserNameAndPassword(string username, string password)
         {
-            return await _dbContext.Patients
+            Patient patient= await _dbContext.Patients
                 .Where(patient =>
                     patient.UserName == username && patient.Password == password)
                 .FirstOrDefaultAsync();
+            return patient;
             
         }
         public async Task<Patient> GetById(int id)

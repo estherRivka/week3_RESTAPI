@@ -11,7 +11,7 @@ namespace CoronaApp.Api
 {
     public class PatientProfile : Profile
     {
-        public PatientProfile()
+         public PatientProfile()
         {
              this.CreateMap<Patient, Patient>();
             this.CreateMap<Patient, PatientModel>()

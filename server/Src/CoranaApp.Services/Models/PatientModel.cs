@@ -11,5 +11,11 @@ namespace CoronaApp.Services.Models
 
      //   [Range(18,120)]
         public int Age { get; set; }
+        public string Token { get; internal set; }
+        public string UserName { get; internal set; }
+        //public string Password { get; internal set; }
+        //public string Name { get; internal set; }
+
+
     }
 }

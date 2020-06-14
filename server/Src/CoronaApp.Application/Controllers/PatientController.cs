@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using CoronaApp.Api.Exceptions;
@@ -34,14 +35,24 @@ namespace CoronaApp.Api.Controllers
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public async Task<ActionResult<PatientModel>> Authenticate([FromBody] AuthenticateModel model)
+        public async Task<ActionResult<string>> Authenticate([FromBody] AuthenticateModel model)
         {
-            PatientModel user =await _patientService.Authenticate(model.Username, model.Password);
+            string token = await _patientService.Authenticate(model.Username, model.Password);
 
-            if (user == null)
+            if (token == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
-
-            return Ok(user);
+            else
+            {
+                    HttpContext.Response.Cookies.Append(".AspNetCore.Application.Id", token,
+                    new CookieOptions
+                    {
+                        
+                        MaxAge = TimeSpan.FromMinutes(60)
+                        
+                    });
+            }
+           
+            return Ok(token);
         }
 
         // GET api/Patient/7
@@ -51,6 +62,15 @@ namespace CoronaApp.Api.Controllers
 
         public async Task<ActionResult<PatientModel>> GetById(int id)
         {
+            ClaimsIdentity claimsIdentity = User.Identity as ClaimsIdentity;
+           //var c= claimsIdentity.FindFirst("Role");
+
+            //var claim= claimsIdentity.Claims.Where(c=>c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role");
+            //foreach (var claim in claimsIdentity.Claims)
+            //{
+            //    var x= claim.Value;
+            //}
+            var claim = claimsIdentity.Claims.Where(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role");
             PatientModel patient = await _patientService.GetById(id);
             if (patient == null)
             {

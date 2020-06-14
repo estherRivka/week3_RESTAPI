@@ -13,8 +13,8 @@ namespace CoronaApp.Services
         Task<Patient> Update(Patient patient);
         Task<Patient> Save(Patient newPatient);
          Task<List<Patient>> GetPatientsByAge(int age);
-        //Task<Patient> Authenticate(string username, string password);
-        Task<Patient> GetByUserNameAndPassword(string username, string password);
+        Task<Patient> getByUserNameAndPassword(string username, string password);
+        Task<string> GetUserName(int id);
 
         //void Delete(int id);
     }

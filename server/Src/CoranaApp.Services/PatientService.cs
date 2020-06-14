@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿
+using AutoMapper;
 using CoronaApp.Entities;
 using CoronaApp.Services.Models;
 using Microsoft.AspNetCore.Routing;
@@ -7,7 +8,6 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -18,48 +18,14 @@ namespace CoronaApp.Services
     public class PatientService : IPatientService
     {
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
         private IPatientRepository _patientRepository;
-        private IConfiguration _configuration;
-        public PatientService(IConfiguration configuration, IPatientRepository patientRepository, IMapper mapper, LinkGenerator linkGenerator )
+        public PatientService(IPatientRepository patientRepository, IMapper mapper, LinkGenerator linkGenerator, IConfiguration configuration )
         {
-            _configuration = configuration;
             _patientRepository = patientRepository;
             _mapper = mapper;
-        }
+            _configuration = configuration;
 
-        public async Task<string> Authenticate(string username, string password)
-        {
-
-            
-                
-
-            Patient user = await _patientRepository.GetByUserNameAndPassword(username,password);
-            PatientModel patient = _mapper.Map<PatientModel>(user);
-            // return null if user not found
-            if (patient == null)
-                return null;
-
-            // authentication successful so generate jwt token
-            var tokenHandler = new JwtSecurityTokenHandler();
-            
-            //  _configuration.GetValue<string>("AppSettings:secret");
-            var key = Encoding.ASCII.GetBytes(_configuration.GetValue<string>("AppSettings:Secret"));
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, patient.UserName.ToString()),
-                    //new Claim(ClaimTypes.)
-                    new Claim("Id", patient.PatientId.ToString())
-                }),
-                Expires = DateTime.UtcNow.AddMinutes(10),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var readyToken = tokenHandler.WriteToken(token);
-            
-            return readyToken;
-          //  return user;
         }
 
         public async Task<PatientModel> GetById(int id)
@@ -107,6 +73,43 @@ namespace CoronaApp.Services
             Patient updatedPatientFromDbs = await _patientRepository.Update(patient);
             Log.Information("Patient with id {@id} updated {@newPatient}", updatedPatientFromDbs.PatientId, updatedPatientFromDbs);
             return _mapper.Map<PatientModel>(updatedPatientFromDbs);
+
+        }
+
+        public async Task<string> AuthenticateAsync(string username, string password)
+        {
+           // Patient patient = new Patient { Age = 1, Password = "1" };
+            Patient patient =await _patientRepository.getByUserNameAndPassword(username ,password);
+
+            // return null if user not found
+            if (patient == null)
+                return null;
+
+
+            // authentication successful so generate jwt token
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var key = Encoding.ASCII.GetBytes(_configuration.GetValue<string>("AppSettings:Secret"));
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, patient.UserName.ToString())
+                }),
+                Expires = DateTime.UtcNow.AddMinutes(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+           var stringToken = tokenHandler.WriteToken(token);
+
+            return stringToken;
+       
+        }
+
+        public async Task<string> GetUserName(int id)
+        {
+            string patientName = await _patientRepository.GetUserName(id);
+            return patientName;
 
         }
 

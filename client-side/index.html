@@ -1,16 +1,26 @@
-﻿<!DOCTYPE html>
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link href="src/city/index.css" rel="stylesheet" />
+	<title>Login V10</title>
+	<meta charset="UTF-8">
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="src/home/main.css">
 </head>
-
-<body>
-  <h1 > 'Welcome To The Korona Information Website!'</h1>
-<a href="src/city/index.html" class="button"> view cities</a>
-<a href="src/patient/index.html" class="button"> view patience</a>
-
-<script src="src/home/index.js"></script>
-</body>
-</html>
+<div class="login-page">
+	<div class="form" onsubmit="return false">
+	  <form class="register-form" onsubmit="return false">
+		<input id="usernameNew" type="text" placeholder="username"/>
+		<input id="passNew" type="password" placeholder="password"/>
+		<input id="ageNew" type="text" placeholder="age"/>
+		<button id="registerBtn">create</button>
+		<p class="message">Already registered? <a href="#">Sign In</a></p>
+	  </form>
+	  <form class="login-form" onsubmit="return false">
+		<input id ="username" type="text" placeholder="username"/>
+		<input id= "pass" type="password" placeholder="password"/>
+		<button id ="loginBtn">login</button>
+		<p class="message">Not registered? <a href="#">Create an account</a></p>
+	  </form>
+	</div>
+	<script src="src/home/index.js"></script>
+  </div>

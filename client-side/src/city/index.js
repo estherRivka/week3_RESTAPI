@@ -1,6 +1,7 @@
 ﻿
 'use strict';
-const URLPath="http://localhost:6060/api/path";
+const URLPath="https://localhost:44335/api/path";
+
 const script = document.createElement('script');
 script.src = '//code.jquery.com/jquery-1.11.0.min.js';
 document.getElementsByTagName('head')[0].appendChild(script);
@@ -14,7 +15,10 @@ function getAllLocationsFromServer(URLPath) {
     return new Promise((resolve, reject) => {
         $.ajax({
             // `${URLPath}/GetAllPaths`
-            url: `${URLPath}/GetAllPaths`, success: function (result) {
+            url: `${URLPath}/GetAllPaths`,
+            //withCredentials: true,
+            xhrFields: { withCredentials: true },
+             success: function (result) {
                 resolve(result);
             },
             error: function (result) {
@@ -28,24 +32,25 @@ function getAllLocationsFromServer(URLPath) {
 function getLocationsFromServerByCity(URLPath,city) {
     return new Promise((resolve, reject) => {
         $.ajax({
-            url: `${URLPath}/GetPathSearchBy?pathSearch.City=${city}&pathSearch.searchByProperty=City`, success: function (result) {
+            url: `${URLPath}/GetPathSearchBy?pathSearch.City=${city}&pathSearch.searchByProperty=City`, 
+            xhrFields: { withCredentials: true },
+            success: function (result) {
                 resolve(result);
             },
             error: function (result) {
                 reject(result);
-
             }
         });
     });
-
-
 }
 
 function getLocationsFromServerByDate(URLPath,startDate,EndDate) {
     return new Promise((resolve, reject) => {
         $.ajax({
             // http://localhost:6060/api/path/GetPathSearchBy?pathSearch.StartDate=01/06/2015&pathSearch.EndDate=01/06/2023&pathSearch.searchByProperty=Date
-            url: `${URLPath}/GetPathSearchBy?pathSearch.StartDate=${startDate}&pathSearch.EndDate=${EndDate}&pathSearch.searchByProperty=Date`, success: function (result) {
+            url: `${URLPath}/GetPathSearchBy?pathSearch.StartDate=${startDate}&pathSearch.EndDate=${EndDate}&pathSearch.searchByProperty=Date`,
+            xhrFields: { withCredentials: true },
+             success: function (result) {
                 resolve(result);
             },
             error: function (result) {

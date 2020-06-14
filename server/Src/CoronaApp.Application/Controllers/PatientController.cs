@@ -61,7 +61,6 @@ namespace CoronaApp.Api.Controllers
         [Route("[action]/{id:int}")]
         [EnableCors]
         [HttpGet]
-
         public async Task<ActionResult<PatientModel>> GetById(int id)
         {
             PatientModel patient = await _patientService.GetById(id);
@@ -102,9 +101,15 @@ namespace CoronaApp.Api.Controllers
 
         }
         //api/patient/getbyid/id
+        ///<summary>
+        ///returns all patients that their age matches the given age
+        ///</summary>
+        ///<param name="age">the age of the patients you want to get</param>
+        ///<returns>list of patients with matching age</returns>
         [Route("[action]/{age:int}")]
         [EnableCors]
         [HttpGet]
+
         public async Task<ActionResult<List<PatientModel>>> GetPatientsByAge([Range(18, 120)]int age)
         {
 

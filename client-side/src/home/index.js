@@ -1,6 +1,9 @@
 
 "use strict";
 
+
+import httpManager from "../httpmanager.js";
+
 let token= null;
 const script = document.createElement('script');
 script.src = '//code.jquery.com/jquery-1.11.0.min.js';
@@ -48,7 +51,14 @@ if (registerBtn !== null) {
         let check = true;
         //validate
         if (check===true){
-            createNewPatient({UserName: userNameInp.value, Password: passwordInp.value, Age: parseInt(ageInp.value)});
+            createNewPatient({UserName: userNameInp.value, Password: passwordInp.value, Age: parseInt(ageInp.value)})
+            .then(()=>{
+                alert("patient created succesfully");
+                
+            })
+            .catch((response)=>{
+                alert((response));
+            });
         }
     });
 }
@@ -131,27 +141,28 @@ function authenticateUser(){
         password: document.getElementById("pass").value
     };
 
-        var xhttp = new XMLHttpRequest();
-        xhttp.withCredentials = true;
+    //     var xhttp = new XMLHttpRequest();
+    //     xhttp.withCredentials = true;
     
-        return new Promise((resolve, reject) => {
+    //     return new Promise((resolve, reject) => {
     
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    resolve();
-                }
-                if (this.readyState == 4 && this.status !== 200) {
-                    const errorMessage = JSON.parse(this.responseText).errorMessage;
-                    alert(errorMessage);
-                    reject(errorMessage);
-                }
-            };
-            xhttp.open("POST", patientControllerURL+"/authenticate");
-            xhttp.setRequestHeader('Content-Type', 'application/json');
-            xhttp.setRequestHeader('Accept', 'application/json');
-            xhttp.send(JSON.stringify(validateModel));
+    //         xhttp.onreadystatechange = function () {
+    //             if (this.readyState == 4 && this.status == 200) {
+    //                 resolve();
+    //             }
+    //             if (this.readyState == 4 && this.status !== 200) {
+    //                 const errorMessage = JSON.parse(this.responseText).errorMessage;
+    //                 alert(errorMessage);
+    //                 reject(errorMessage);
+    //             }
+    //         };
+    //         xhttp.open("POST", patientControllerURL+"/authenticate");
+    //         xhttp.setRequestHeader('Content-Type', 'application/json');
+    //         xhttp.setRequestHeader('Accept', 'application/json');
+    //         xhttp.send(JSON.stringify(validateModel));
     
-    });
+    // });
+   return httpManager.post(patientControllerURL+"/authenticate", JSON.stringify(validateModel));
 }
 
 $('.message a').click(function(){
@@ -161,26 +172,27 @@ $('.message a').click(function(){
 
  function createNewPatient(newPatient, url) {
 
-    var xhttp = new XMLHttpRequest();
-    xhttp.withCredentials = true;
+    // var xhttp = new XMLHttpRequest();
+    // xhttp.withCredentials = true;
 
-    return new Promise((resolve, reject) => {
+    // return new Promise((resolve, reject) => {
 
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 201) {
-                resolve(JSON.parse(this.responseText));
-            }
-            if (this.readyState == 4 && this.status !== 201) {
-                const errorMessage = JSON.parse(this.responseText).errorMessage;
-                alert(errorMessage);
-                reject(errorMessage);
-            }
-        };
-        xhttp.open("POST", "https://localhost:44377/api/patient");
-        xhttp.setRequestHeader('Content-Type', 'application/json');
-        xhttp.setRequestHeader('Accept', 'application/json');
-        xhttp.send(JSON.stringify(newPatient));
-    });
+    //     xhttp.onreadystatechange = function () {
+    //         if (this.readyState == 4 && this.status == 201) {
+    //             resolve(JSON.parse(this.responseText));
+    //         }
+    //         if (this.readyState == 4 && this.status !== 201) {
+    //             const errorMessage = JSON.parse(this.responseText).errorMessage;
+    //             alert(errorMessage);
+    //             reject(errorMessage);
+    //         }
+    //     };
+    //     xhttp.open("POST", "https://localhost:44377/api/patient");
+    //     xhttp.setRequestHeader('Content-Type', 'application/json');
+    //     xhttp.setRequestHeader('Accept', 'application/json');
+    //     xhttp.send(JSON.stringify(newPatient));
+    // });
+    return httpManager.post("https://localhost:44377/api/patient",JSON.stringify(newPatient));
 
 }
     

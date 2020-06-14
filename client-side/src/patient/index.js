@@ -1,4 +1,5 @@
 "use strict";
+import httpManager from "../httpmanager.js";
 const patientControllerURL = "https://localhost:44377/api/patient";
 
 const columnNames = ["Start Date", "End Date", "City", "Location"];
@@ -11,75 +12,77 @@ window.onload = function () {
 
 function getPatientById(currentPatientId, url) {
 
-    var xhttp = new XMLHttpRequest();
-    xhttp.withCredentials = true;
+    // var xhttp = new XMLHttpRequest();
+    // xhttp.withCredentials = true;
 
-    return new Promise((resolve, reject) => {
+    // return new Promise((resolve, reject) => {
 
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                resolve(JSON.parse(this.responseText));
-            }
-            if (this.readyState == 4 && this.status !== 200) {                     
-                reject({ statusCode:this.status, response: JSON.parse(this.responseText)});
-            }
-        };
-        xhttp.open("GET", `${url}/GetById/${currentPatientId}`);
-        xhttp.send();
-    });
+    //     xhttp.onreadystatechange = function () {
+    //         if (this.readyState == 4 && this.status == 200) {
+    //             resolve(JSON.parse(this.responseText));
+    //         }
+    //         if (this.readyState == 4 && this.status !== 200) {                     
+    //             reject({ statusCode:this.status, response: JSON.parse(this.responseText)});
+    //         }
+    //     };
+    //     xhttp.open("GET", `${url}/GetById/${currentPatientId}`);
+    //     xhttp.send();
+    // });
+  return  httpManager.get(`${url}/GetById/${currentPatientId}`);
 
 }
 
 function updatePatient(updatedPatient, url) {
 
-    var xhttp = new XMLHttpRequest();
-    xhttp.withCredentials = true;
+    // var xhttp = new XMLHttpRequest();
+    // xhttp.withCredentials = true;
 
-    return new Promise((resolve, reject) => {
+    // return new Promise((resolve, reject) => {
 
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                resolve(JSON.parse(this.responseText));
-            }
-            if (this.readyState == 4 && this.status !== 200) {
-                const errorMessage = JSON.parse(this.responseText).errorMessage;
-                alert(errorMessage);
-                reject(errorMessage);
-            }
-        };
-        xhttp.open("PUT", url);
-        xhttp.setRequestHeader('Content-Type', 'application/json');
-        xhttp.setRequestHeader('Accept', 'application/json');
-        xhttp.send(JSON.stringify(updatedPatient));
-    });
-
-}
-
-
-function createNewPatient(patientId, url) {
-
-    var xhttp = new XMLHttpRequest();
-    xhttp.withCredentials = true;
-
-    return new Promise((resolve, reject) => {
-
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 201) {
-                resolve(JSON.parse(this.responseText));
-            }
-            if (this.readyState == 4 && this.status !== 201) {
-                const errorMessage = JSON.parse(this.responseText).errorMessage;
-                alert(errorMessage);
-                reject(errorMessage);
-            }
-        };
-        xhttp.open("POST", url);
-        xhttp.setRequestHeader('Content-Type', 'application/json');
-        xhttp.setRequestHeader('Accept', 'application/json');
-        xhttp.send(JSON.stringify({PatientId:patientId}));
-    });
+    //     xhttp.onreadystatechange = function () {
+    //         if (this.readyState == 4 && this.status == 200) {
+    //             resolve(JSON.parse(this.responseText));
+    //         }
+    //         if (this.readyState == 4 && this.status !== 200) {
+    //             const errorMessage = JSON.parse(this.responseText).errorMessage;
+    //             alert(errorMessage);
+    //             reject(errorMessage);
+    //         }
+    //     };
+    //     xhttp.open("PUT", url);
+    //     xhttp.setRequestHeader('Content-Type', 'application/json');
+    //     xhttp.setRequestHeader('Accept', 'application/json');
+    //     xhttp.send(JSON.stringify(updatedPatient));
+    // });
+    return httpManager.put(url,JSON.stringify(updatedPatient));
 
 }
+
+
+// function createNewPatient(patientId, url) {
+
+//     var xhttp = new XMLHttpRequest();
+//     xhttp.withCredentials = true;
+
+//     return new Promise((resolve, reject) => {
+
+//         xhttp.onreadystatechange = function () {
+//             if (this.readyState == 4 && this.status == 201) {
+//                 resolve(JSON.parse(this.responseText));
+//             }
+//             if (this.readyState == 4 && this.status !== 201) {
+//                 const errorMessage = JSON.parse(this.responseText).errorMessage;
+//                 alert(errorMessage);
+//                 reject(errorMessage);
+//             }
+//         };
+//         xhttp.open("POST", url);
+//         xhttp.setRequestHeader('Content-Type', 'application/json');
+//         xhttp.setRequestHeader('Accept', 'application/json');
+//         xhttp.send(JSON.stringify({PatientId:patientId}));
+//     });
+
+// }
 
 
 
@@ -210,24 +213,6 @@ function buildLocationTable(currentPatient, columnNames, columnKeys) {
     document.getElementById("addLocationDv").style.display = "block";
 }
 
-function addRowToTable(table, newLocation, currentPatient, columnKeys) {
-
-    const row = table.insertRow(-1);
-
-    for (let key of columnKeys) {
-        let cell = row.insertCell(-1);
-        cell.innerHTML = newLocation[key];
-    }
-
-    const deleteCell = row.insertCell(-1);
-    const deleteBtn = document.createElement("BUTTON");
-    deleteBtn.innerHTML = "Delete";
-    deleteBtn.addEventListener("click", function () {
-        deleteLocation(currentPatient, row);
-    });
-    deleteCell.appendChild(deleteBtn);
-
-}
 
 
 async function addLocation(currentPatient, columnKeys) {
@@ -280,6 +265,26 @@ async function addLocation(currentPatient, columnKeys) {
     }
 
 }
+
+function addRowToTable(table, newLocation, currentPatient, columnKeys) {
+
+    const row = table.insertRow(-1);
+
+    for (let key of columnKeys) {
+        let cell = row.insertCell(-1);
+        cell.innerHTML = newLocation[key];
+    }
+
+    const deleteCell = row.insertCell(-1);
+    const deleteBtn = document.createElement("BUTTON");
+    deleteBtn.innerHTML = "Delete";
+    deleteBtn.addEventListener("click", function () {
+        deleteLocation(currentPatient, row);
+    });
+    deleteCell.appendChild(deleteBtn);
+
+}
+
 
 function deleteLocation(currentPatient, rowToDelete) {
 

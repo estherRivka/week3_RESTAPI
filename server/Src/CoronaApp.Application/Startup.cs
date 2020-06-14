@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using CoronaApp.Dal;
+using CoronaApp.Entities;
 using CoronaApp.Services;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -36,9 +38,6 @@ namespace CoronaApp.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-       //     services.AddAuthentication(
-       //CertificateAuthenticationDefaults.AuthenticationScheme)
-       //.AddCertificate();
 
             var key = Encoding.ASCII.GetBytes(Configuration.GetValue<string>("AppSettings:Secret"));
             services.AddAuthentication(x =>
@@ -70,9 +69,6 @@ namespace CoronaApp.Api
             services.AddDbContext<CoronaContext>(options => options.UseSqlServer
             (Configuration.GetConnectionString("CoronaDBConnectionString")));
 
-            //services.AddDbContext<CoronaContext>(options => options.UseSqlServer
-            //(Configuration.GetConnectionString("CoronaDBConnectionString")));
-
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
             services.AddCors(options =>
@@ -89,6 +85,21 @@ namespace CoronaApp.Api
                     });
 
             });
+            services.AddSwaggerGen(setupAction =>
+            {
+                setupAction.SwaggerDoc(
+                    "LibraryOpenApiDocumentSpecification",
+                    new Microsoft.OpenApi.Models.OpenApiInfo()
+                    {
+                        Title = "LibraryApi",
+                        Version = "1"
+                    });
+
+                //var xmlCommentsFile = $"{ Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                //var xmlCommentsFileFullPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
+                //setupAction.IncludeXmlComments(xmlCommentsFileFullPath);
+
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -101,9 +112,18 @@ namespace CoronaApp.Api
             app.UseErrorHandlingMiddleware();
             app.UseStatusCodePages();
 
-            app.UseStaticFiles();
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(setupAction =>
+            {
+                setupAction.SwaggerEndpoint(
+                "/swagger/LibraryOpenApiDocumentSpecification/swagger.json",
+                "Library Api");
+                setupAction.RoutePrefix = "";
+            });
 
             app.UseRouting();
             app.UseCors("Policy1");
@@ -111,7 +131,7 @@ namespace CoronaApp.Api
             {
                 MinimumSameSitePolicy = SameSiteMode.None,
                 HttpOnly = HttpOnlyPolicy.Always,
-               // Secure = CookieSecurePolicy.Always
+                Secure = CookieSecurePolicy.Always
             });
 
             app.Use(async (context, next) =>

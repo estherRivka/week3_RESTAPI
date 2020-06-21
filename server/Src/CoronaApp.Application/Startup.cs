@@ -17,11 +17,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using NServiceBus;
+using NServiceBus.Routing;
 using System;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-[assembly: ApiConventionType(typeof(DefaultApiConventions))]
+//[assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace CoronaApp.Api
 {
     public class Startup
@@ -34,12 +36,27 @@ namespace CoronaApp.Api
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public async System.Threading.Tasks.Task ConfigureServicesAsync(IServiceCollection services)
         {
+            var endpointConfiguration = new EndpointConfiguration("Corona");
+
+            var transport = endpointConfiguration.UseTransport<LearningTransport>();
+            /*            endpointConfiguration.RegisterComponents(
+                registration: configureComponents =>
+                {
+                    configureComponents.ConfigureComponent<IEndpointInstance>(DependencyLifecycle.SingleInstance);
+                });*/
+
+            var endpointInstance = await NServiceBus.Endpoint.Start(endpointConfiguration)
+
+                .ConfigureAwait(false);
+
+            services.AddScoped(typeof(IEndpointInstance), x=> endpointInstance);
             services.AddScoped(typeof(IPatientRepository), typeof(PatientRepository));
             services.AddScoped(typeof(IPathRepository), typeof(PathRepository));
             services.AddScoped(typeof(IPathService), typeof(PathService));
             services.AddScoped(typeof(IPatientService), typeof(PatientService));
+            services.AddScoped(typeof(IEndpointInstance), typeof(EndpointInstance));
 
             //services.AddDbContext<CoronaContext>(options => options.UseSqlServer
             //(Configuration.GetConnectionString("CoronaDBConnectionStringTzippy")));
@@ -62,6 +79,9 @@ namespace CoronaApp.Api
                     });
 
             });
+            
+
+           // services.AddIEndpointInstance();
             var key = Encoding.ASCII.GetBytes(Configuration.GetValue<string>("AppSettings:Secret"));
             //var appSettingsSection = Configuration.GetSection("AppSettings");
             //services.Configure<AppSettings>(appSettingsSection);
@@ -89,7 +109,7 @@ namespace CoronaApp.Api
                     ClockSkew = TimeSpan.Zero
                 };
             });
-            services.AddApiVersioning(setupAction =>
+/*            services.AddApiVersioning(setupAction =>
             {
                 setupAction.AssumeDefaultVersionWhenUnspecified = true;
                 setupAction.DefaultApiVersion = new ApiVersion(1, 0);
@@ -100,9 +120,9 @@ namespace CoronaApp.Api
             services.AddVersionedApiExplorer(setupAction =>
             {
                 setupAction.GroupNameFormat = "'v'VV";
-            });
+            });*/
 
-            var versionDescriptionProvider =
+          /*  var versionDescriptionProvider =
                    services.BuildServiceProvider().GetService<IApiVersionDescriptionProvider>();
             //  apiVersionDescriptionProvider.ApiVersionDescriptions
             services.AddSwaggerGen(setupAction =>
@@ -146,7 +166,7 @@ namespace CoronaApp.Api
 
               
             });
-            services.AddMvc(setupAction =>
+          */  services.AddMvc(setupAction =>
             {
                 setupAction.OutputFormatters.Add(new XmlSerializerOutputFormatter());
                 setupAction.ReturnHttpNotAcceptable = true;
@@ -173,14 +193,14 @@ namespace CoronaApp.Api
 
             app.UseHttpsRedirection();
             app.UseSwagger();
-            app.UseSwaggerUI(setupAction =>
+           /* app.UseSwaggerUI(setupAction =>
             {
                 foreach(var description in apiVersionDescriptionProvider.ApiVersionDescriptions)
                 {
                     setupAction.SwaggerEndpoint($"/swagger/CoronaAppOpenApiSpecification{description.GroupName}/swagger.json", $"CoronaApp Api {description.GroupName}");
 
                 }
-            });
+            });*/
             app.UseRouting();
             app.UseCors("Policy1"
                 );

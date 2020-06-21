@@ -2,9 +2,12 @@
 using AutoMapper;
 using CoronaApp.Entities;
 using CoronaApp.Services.Models;
+using Messages;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using NServiceBus;
+using NServiceBus.Routing;
 using RabbitMQ.Client;
 using Serilog;
 using System;
@@ -22,11 +25,13 @@ namespace CoronaApp.Services
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
         private IPatientRepository _patientRepository;
-        public PatientService(IPatientRepository patientRepository, IMapper mapper, LinkGenerator linkGenerator, IConfiguration configuration )
+        private IEndpointInstance _endpointInstance;
+        public PatientService(IPatientRepository patientRepository, IEndpointInstance endpointInstance, IMapper mapper, LinkGenerator linkGenerator, IConfiguration configuration)
         {
             _patientRepository = patientRepository;
             _mapper = mapper;
             _configuration = configuration;
+            _endpointInstance = endpointInstance;
 
         }
 
@@ -45,7 +50,7 @@ namespace CoronaApp.Services
 
         public async Task<List<PatientModel>> GetPatientsByAge(int age)
         {
-          List<Patient> patients = await _patientRepository.GetPatientsByAge(age);
+            List<Patient> patients = await _patientRepository.GetPatientsByAge(age);
             return _mapper.Map<List<PatientModel>>(patients);
         }
 
@@ -62,7 +67,7 @@ namespace CoronaApp.Services
             Patient newPatientFromDbs = await _patientRepository.Save(patient);
             Log.Information("Patient Created {@newPatient}", newPatient);
 
-            SendToConsumers($"Patient Created with id: {newPatientFromDbs.PatientId}", "info");
+           await PublishPatientCreated($"Patient Created with id: {newPatientFromDbs.PatientId}");
             return _mapper.Map<PatientModel>(newPatientFromDbs);
         }
 
@@ -83,8 +88,8 @@ namespace CoronaApp.Services
 
         public async Task<string> AuthenticateAsync(string username, string password)
         {
-           // Patient patient = new Patient { Age = 1, Password = "1" };
-            Patient patient =await _patientRepository.getByUserNameAndPassword(username ,password);
+            // Patient patient = new Patient { Age = 1, Password = "1" };
+            Patient patient = await _patientRepository.getByUserNameAndPassword(username, password);
 
             // return null if user not found
             if (patient == null)
@@ -105,10 +110,10 @@ namespace CoronaApp.Services
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-           var stringToken = tokenHandler.WriteToken(token);
+            var stringToken = tokenHandler.WriteToken(token);
 
             return stringToken;
-       
+
         }
 
         public async Task<string> GetUserName(int id)
@@ -124,40 +129,15 @@ namespace CoronaApp.Services
         //}
 
 
-        public void SendToConsumers(string message, string routingKey)
+        public async Task PublishPatientCreated(string message)
         {
-            var factory = new ConnectionFactory() { HostName = "localhost" };
-            using (var connection = factory.CreateConnection())
-            {
-                using (var channel = connection.CreateModel())
-                {
-                    //channel.ConfirmSelect();
+            PatientCreated patientCreated = new PatientCreated
+            { 
+                PatientId = 1 
+            };
+            await _endpointInstance.Publish(patientCreated)
+               .ConfigureAwait(false);
 
-                    channel.ExchangeDeclare(exchange: "direct_logs",
-                                    type: ExchangeType.Direct);
-
-                   
-                  
-                    var body = Encoding.UTF8.GetBytes(message);
-
-                    channel.BasicPublish(exchange: "direct_logs",
-                                         routingKey: routingKey,
-                                         basicProperties: null,
-                                         body: body);
-
-                    //channel.WaitForConfirmsOrDie(new TimeSpan(0, 0, 5));
-
-    
-
-                }
-  
-            }
-
-        }
-
-        private static string GetMessage(string[] args)
-        {
-            return ((args.Length > 0) ? string.Join(" ", args) : "Hello World!");
         }
     }
 }

@@ -33,18 +33,6 @@ namespace CoronaApp.Api
                 Debugger.Break();
             });
 
-           // var endpointConfiguration = new EndpointConfiguration("Corona");
-
-            //var transport = endpointConfiguration.UseTransport<LearningTransport>();
-/*            endpointConfiguration.RegisterComponents(
-    registration: configureComponents =>
-    {
-        configureComponents.ConfigureComponent<IEndpointInstance>(DependencyLifecycle.SingleInstance);
-    });*/
-
-            //var endpointInstance = await Endpoint.Start(endpointConfiguration)
-               
-               // .ConfigureAwait(false);
             try
             {
                 Log.Information("The program has started!!!");

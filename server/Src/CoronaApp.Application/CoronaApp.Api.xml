@@ -17,5 +17,12 @@
             <response code = "200">returns all paths</response>
              <response code = "513">returns all paths</response>
         </member>
+        <member name="M:CoronaApp.Api.Controllers.PatientController.GetPatientsByAge(System.Int32)">
+            <summary>
+            returns all patients that their age matches the given age
+            </summary>
+            <param name="age">the age of the patients you want to get</param>
+            <returns>list of patients with matching age</returns>
+        </member>
     </members>
 </doc>

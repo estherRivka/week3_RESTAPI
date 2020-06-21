@@ -41,11 +41,11 @@ namespace CoronaApp.Api
             services.AddScoped(typeof(IPathService), typeof(PathService));
             services.AddScoped(typeof(IPatientService), typeof(PatientService));
 
-            services.AddDbContext<CoronaContext>(options => options.UseSqlServer
-            (Configuration.GetConnectionString("CoronaDBConnectionStringTzippy")));
-
             //services.AddDbContext<CoronaContext>(options => options.UseSqlServer
-            //(Configuration.GetConnectionString("CoronaDBConnectionString")));
+            //(Configuration.GetConnectionString("CoronaDBConnectionStringTzippy")));
+
+            services.AddDbContext<CoronaContext>(options => options.UseSqlServer
+            (Configuration.GetConnectionString("CoronaDBConnectionString")));
 
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers();

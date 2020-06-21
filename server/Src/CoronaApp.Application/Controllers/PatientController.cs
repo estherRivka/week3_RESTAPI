@@ -16,7 +16,7 @@ using Serilog;
 
 namespace CoronaApp.Api.Controllers
 {
-    [Authorize]
+    /*[Authorize]*/
     [Route("api/[controller]")]
     [ApiController]
 

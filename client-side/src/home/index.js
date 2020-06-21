@@ -2,7 +2,7 @@
 "use strict";
 
 
-import httpManager from "../httpmanager.js";
+import {httpManager} from "../httpManager.js";
 
 let token= null;
 const script = document.createElement('script');

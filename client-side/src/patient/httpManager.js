@@ -1,4 +1,4 @@
-export default class httpManager {
+export class httpManager {
 
     static get(url) {
 

@@ -14,6 +14,11 @@ namespace HealthMinistry
 
             var transport = endpointConfiguration.UseTransport<LearningTransport>();
 
+            var conventions = endpointConfiguration.Conventions();
+
+            conventions.DefiningCommandsAs(type => type.Namespace == "Messages.Commands");
+            conventions.DefiningEventsAs(type => type.Namespace == "Messages.Events");
+
             var endpointInstance = await Endpoint.Start(endpointConfiguration)
                 .ConfigureAwait(false);
 

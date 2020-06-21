@@ -3,6 +3,7 @@ using AutoMapper;
 using CoronaApp.Entities;
 using CoronaApp.Services.Models;
 using Messages;
+using Messages.Events;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -129,18 +130,12 @@ namespace CoronaApp.Services
         //}
 
 
-        public async Task PublishPatientCreated(int message)
+        public async Task PublishPatientCreated(int PatientId)
         {
-            /*            IPatientCreated patientCreated = new PatientCreated
-                        { 
-                            PatientId = 1 
-                        };
-                        await _endpointInstance.Publish(patientCreated)
-                           .ConfigureAwait(false);*/
 
             await _messageSession.Publish<IPatientCreatedV_2>(message =>
             {
-                message.PatientId = 1;
+                message.PatientId = PatientId;
             })
                  .ConfigureAwait(false);
         }

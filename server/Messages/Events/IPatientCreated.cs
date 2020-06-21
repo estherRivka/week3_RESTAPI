@@ -1,8 +1,8 @@
 ﻿using NServiceBus;
 
-namespace Messages
+namespace Messages.Events
 {
-    public interface IPatientCreated : IEvent
+    public interface IPatientCreated 
     {
          int PatientId { get; set; }
     }

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NServiceBus;
 using Serilog;
+using Messages.Events;
 
 namespace CoronaApp.Api
 {
@@ -61,6 +62,9 @@ namespace CoronaApp.Api
             {
                 var endpointConfiguration = new EndpointConfiguration("CoronaApp");
                 var transport = endpointConfiguration.UseTransport<LearningTransport>();
+                var conventions = endpointConfiguration.Conventions();
+                conventions.DefiningCommandsAs(type => type.Namespace == "Messages.Commands");
+                conventions.DefiningEventsAs(type => type.Namespace == "Messages.Events");
 
                 return endpointConfiguration;
             })

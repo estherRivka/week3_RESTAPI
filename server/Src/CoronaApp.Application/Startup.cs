@@ -38,19 +38,21 @@ namespace CoronaApp.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public async void ConfigureServices(IServiceCollection services)
         {
-            var endpointConfiguration = new EndpointConfiguration("CoronaApp");
+            /*            var endpointConfiguration = new EndpointConfiguration("CoronaApplication");
 
-            var transport = endpointConfiguration.UseTransport<LearningTransport>();
+                        var transport = endpointConfiguration.UseTransport<LearningTransport>();*/
 
-            var endpointInstance = await NServiceBus.Endpoint.Start(endpointConfiguration)
-                .ConfigureAwait(false);
+            /*           */
+       //     var endpointInstance = await NServiceBus.Endpoint.Start(endpointConfiguration);
 
-            services.AddScoped(typeof(IEndpointInstance), x=> endpointInstance);
+              //  var endpointInstance = services.BuildServiceProvider().GetService<IMessageSession>();
+            //.ConfigureAwait(false);
+
+           // services.AddScoped(typeof(IEndpointInstance), x => endpointInstance);
             services.AddScoped(typeof(IPatientRepository), typeof(PatientRepository));
             services.AddScoped(typeof(IPathRepository), typeof(PathRepository));
             services.AddScoped(typeof(IPathService), typeof(PathService));
             services.AddScoped(typeof(IPatientService), typeof(PatientService));
-            services.AddScoped(typeof(IEndpointInstance), typeof(EndpointInstance));
 
             //services.AddDbContext<CoronaContext>(options => options.UseSqlServer
             //(Configuration.GetConnectionString("CoronaDBConnectionStringTzippy")));
@@ -118,6 +120,7 @@ namespace CoronaApp.Api
 
             var versionDescriptionProvider =
                    services.BuildServiceProvider().GetService<IApiVersionDescriptionProvider>();
+
             //  apiVersionDescriptionProvider.ApiVersionDescriptions
             services.AddSwaggerGen(setupAction =>
             {
@@ -165,6 +168,7 @@ namespace CoronaApp.Api
             {
                 setupAction.OutputFormatters.Add(new XmlSerializerOutputFormatter());
                 setupAction.ReturnHttpNotAcceptable = true;
+ 
                 //setupAction.Filters.Add(
 
                 //    )
@@ -183,7 +187,7 @@ namespace CoronaApp.Api
             }
             app.UseErrorHandlingMiddleware();
             app.UseStatusCodePages();
-           app.UseApiVersioning();
+            app.UseApiVersioning();
             app.UseStaticFiles();
 
             app.UseHttpsRedirection();

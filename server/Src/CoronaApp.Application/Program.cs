@@ -38,6 +38,8 @@ namespace CoronaApp.Api
                 Log.Information("The program has started!!!");
 
                 CreateHostBuilder(args).Build().Run();
+
+
             }
             catch (Exception ex)
             {
@@ -45,22 +47,36 @@ namespace CoronaApp.Api
             }
             finally
             {
-               /* await endpointInstance.Stop()
-                  .ConfigureAwait(false);
-               */ Log.CloseAndFlush();
+                /* await endpointInstance.Stop()
+                   .ConfigureAwait(false);
+                */
+                Log.CloseAndFlush();
             }
         }
 
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>()
-                              .UseConfiguration(Configuration)
-                              .UseSerilog();
-                              
-                });
+            .UseNServiceBus(context =>
+            {
+                var endpointConfiguration = new EndpointConfiguration("CoronaApp");
+                var transport = endpointConfiguration.UseTransport<LearningTransport>();
+
+                return endpointConfiguration;
+            })
+            .ConfigureWebHostDefaults(webBuilder =>
+             {
+                 webBuilder.UseStartup<Startup>()
+                           .UseConfiguration(Configuration)
+                           .UseSerilog();
+
+             });
+
+
+
+
+
+
 
     }
 }

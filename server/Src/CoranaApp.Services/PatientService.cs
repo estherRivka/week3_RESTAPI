@@ -25,13 +25,13 @@ namespace CoronaApp.Services
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
         private IPatientRepository _patientRepository;
-        private IEndpointInstance _endpointInstance;
-        public PatientService(IPatientRepository patientRepository, IEndpointInstance endpointInstance, IMapper mapper, LinkGenerator linkGenerator, IConfiguration configuration)
+        private IMessageSession _messageSession;
+        public PatientService(IPatientRepository patientRepository, IMapper mapper,IMessageSession messageSession, LinkGenerator linkGenerator, IConfiguration configuration)
         {
             _patientRepository = patientRepository;
             _mapper = mapper;
             _configuration = configuration;
-            _endpointInstance = endpointInstance;
+            _messageSession = messageSession;
 
         }
 
@@ -67,7 +67,7 @@ namespace CoronaApp.Services
             Patient newPatientFromDbs = await _patientRepository.Save(patient);
             Log.Information("Patient Created {@newPatient}", newPatient);
 
-           await PublishPatientCreated($"Patient Created with id: {newPatientFromDbs.PatientId}");
+           await PublishPatientCreated(newPatientFromDbs.PatientId);
             return _mapper.Map<PatientModel>(newPatientFromDbs);
         }
 
@@ -129,15 +129,20 @@ namespace CoronaApp.Services
         //}
 
 
-        public async Task PublishPatientCreated(string message)
+        public async Task PublishPatientCreated(int message)
         {
-            PatientCreated patientCreated = new PatientCreated
-            { 
-                PatientId = 1 
-            };
-            await _endpointInstance.Publish(patientCreated)
-               .ConfigureAwait(false);
+            /*            IPatientCreated patientCreated = new PatientCreated
+                        { 
+                            PatientId = 1 
+                        };
+                        await _endpointInstance.Publish(patientCreated)
+                           .ConfigureAwait(false);*/
 
+            await _messageSession.Publish<IPatientCreatedV_2>(message =>
+            {
+                message.PatientId = 1;
+            })
+                 .ConfigureAwait(false);
         }
     }
 }

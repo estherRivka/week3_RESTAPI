@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Serilog;
+using NServiceBus;
 
 namespace CoronaApp.Api.Controllers
 {

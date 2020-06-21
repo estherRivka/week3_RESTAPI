@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace MagenDavidAdom
 {
-    public class PatientCreatedHandler : IHandleMessages<PatientCreated>
+    public class PatientCreatedHandler : IHandleMessages<IPatientCreated>
     {
-        static ILog log = LogManager.GetLogger<PatientCreated>();
-        public Task Handle(PatientCreated message, IMessageHandlerContext context)
+        static ILog log = LogManager.GetLogger<IPatientCreated>();
+        public Task Handle(IPatientCreated message, IMessageHandlerContext context)
         {
             log.Info($"Received PatientCreated, PatientId = {message.PatientId}");
 

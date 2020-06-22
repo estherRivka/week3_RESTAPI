@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NServiceBus;
 using Serilog;
 
 namespace CoronaApp.Api
@@ -20,7 +21,7 @@ namespace CoronaApp.Api
                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
                 .Build();
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(Configuration)
@@ -35,7 +36,10 @@ namespace CoronaApp.Api
             try
             {
                 Log.Information("The program has started!!!");
+
                 CreateHostBuilder(args).Build().Run();
+
+
             }
             catch (Exception ex)
             {
@@ -43,6 +47,9 @@ namespace CoronaApp.Api
             }
             finally
             {
+                /* await endpointInstance.Stop()
+                   .ConfigureAwait(false);
+                */
                 Log.CloseAndFlush();
             }
         }
@@ -50,13 +57,26 @@ namespace CoronaApp.Api
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>()
-                              .UseConfiguration(Configuration)
-                              .UseSerilog();
-                              
-                });
+            .UseNServiceBus(context =>
+            {
+                var endpointConfiguration = new EndpointConfiguration("CoronaApp");
+                var transport = endpointConfiguration.UseTransport<LearningTransport>();
+
+                return endpointConfiguration;
+            })
+            .ConfigureWebHostDefaults(webBuilder =>
+             {
+                 webBuilder.UseStartup<Startup>()
+                           .UseConfiguration(Configuration)
+                           .UseSerilog();
+
+             });
+
+
+
+
+
+
 
     }
 }

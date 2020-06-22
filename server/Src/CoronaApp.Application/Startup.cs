@@ -17,11 +17,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using NServiceBus;
+using NServiceBus.Routing;
 using System;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-[assembly: ApiConventionType(typeof(DefaultApiConventions))]
+//[assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace CoronaApp.Api
 {
     public class Startup
@@ -34,8 +36,19 @@ namespace CoronaApp.Api
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public async void ConfigureServices(IServiceCollection services)
         {
+            /*            var endpointConfiguration = new EndpointConfiguration("CoronaApplication");
+
+                        var transport = endpointConfiguration.UseTransport<LearningTransport>();*/
+
+            /*           */
+       //     var endpointInstance = await NServiceBus.Endpoint.Start(endpointConfiguration);
+
+              //  var endpointInstance = services.BuildServiceProvider().GetService<IMessageSession>();
+            //.ConfigureAwait(false);
+
+           // services.AddScoped(typeof(IEndpointInstance), x => endpointInstance);
             services.AddScoped(typeof(IPatientRepository), typeof(PatientRepository));
             services.AddScoped(typeof(IPathRepository), typeof(PathRepository));
             services.AddScoped(typeof(IPathService), typeof(PathService));
@@ -62,6 +75,9 @@ namespace CoronaApp.Api
                     });
 
             });
+            
+
+           // services.AddIEndpointInstance();
             var key = Encoding.ASCII.GetBytes(Configuration.GetValue<string>("AppSettings:Secret"));
             //var appSettingsSection = Configuration.GetSection("AppSettings");
             //services.Configure<AppSettings>(appSettingsSection);
@@ -94,7 +110,7 @@ namespace CoronaApp.Api
                 setupAction.AssumeDefaultVersionWhenUnspecified = true;
                 setupAction.DefaultApiVersion = new ApiVersion(1, 0);
                 setupAction.ReportApiVersions = true;
-               // setupAction.ApiVersionReader = new HeaderApiVersionReader("version-api");
+                // setupAction.ApiVersionReader = new HeaderApiVersionReader("version-api");
             });
 
             services.AddVersionedApiExplorer(setupAction =>
@@ -104,13 +120,14 @@ namespace CoronaApp.Api
 
             var versionDescriptionProvider =
                    services.BuildServiceProvider().GetService<IApiVersionDescriptionProvider>();
+
             //  apiVersionDescriptionProvider.ApiVersionDescriptions
             services.AddSwaggerGen(setupAction =>
             {
-                foreach(var description in versionDescriptionProvider.ApiVersionDescriptions)
+                foreach (var description in versionDescriptionProvider.ApiVersionDescriptions)
                 {
- setupAction.SwaggerDoc(
-                $"CoronaAppOpenApiSpecification{description.GroupName}", new Microsoft.OpenApi.Models.OpenApiInfo()
+                    setupAction.SwaggerDoc(
+                                     $"CoronaAppOpenApiSpecification{description.GroupName}", new Microsoft.OpenApi.Models.OpenApiInfo()
                 {
                     Title = "Corona Api",
                     Version = description.ApiVersion.ToString(),
@@ -127,10 +144,10 @@ namespace CoronaApp.Api
                     var xmlCommentsFullPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
                     setupAction.IncludeXmlComments(xmlCommentsFullPath);
                 }
-               setupAction.DocInclusionPredicate((documentName, apiDescription) =>
-                    {
+                setupAction.DocInclusionPredicate((documentName, apiDescription) =>
+                       {
                         var docApiVersionModel = apiDescription.ActionDescriptor.GetApiVersionModel(ApiVersionMapping.Explicit | ApiVersionMapping.Implicit);
-                        if(docApiVersionModel==null)
+                        if (docApiVersionModel == null)
                         {
                             return true;
                         }
@@ -144,12 +161,14 @@ namespace CoronaApp.Api
 
                     });
 
-              
+
             });
+
             services.AddMvc(setupAction =>
             {
                 setupAction.OutputFormatters.Add(new XmlSerializerOutputFormatter());
                 setupAction.ReturnHttpNotAcceptable = true;
+ 
                 //setupAction.Filters.Add(
 
                 //    )
@@ -168,14 +187,14 @@ namespace CoronaApp.Api
             }
             app.UseErrorHandlingMiddleware();
             app.UseStatusCodePages();
-           // app.UseApiVersioning();
+            app.UseApiVersioning();
             app.UseStaticFiles();
 
             app.UseHttpsRedirection();
             app.UseSwagger();
             app.UseSwaggerUI(setupAction =>
             {
-                foreach(var description in apiVersionDescriptionProvider.ApiVersionDescriptions)
+                foreach (var description in apiVersionDescriptionProvider.ApiVersionDescriptions)
                 {
                     setupAction.SwaggerEndpoint($"/swagger/CoronaAppOpenApiSpecification{description.GroupName}/swagger.json", $"CoronaApp Api {description.GroupName}");
 

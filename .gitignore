@@ -1,4 +1,5 @@
 dist
+.learningtransport
 node_modules
 *.swp
 *.*~

@@ -13,6 +13,7 @@ namespace MagenDavidAdom
         public Task Handle(IPatientCreated message, IMessageHandlerContext context)
         {
             log.Info($"Received PatientCreated, PatientId = {message.PatientId}");
+            //throw new Exception();
 
             return Task.CompletedTask;
 

@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 
 namespace CoronaApp.Services
 {
+
     public class PatientService : IPatientService
     {
         private readonly IMapper _mapper;
